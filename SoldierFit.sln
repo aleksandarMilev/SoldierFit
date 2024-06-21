@@ -5,6 +5,10 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoldierFit", "SoldierFit\SoldierFit.csproj", "{281484AD-DAED-45B6-A96D-0C4AC9C5EE9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoldierFit.Core", "SoldierFit.Core\SoldierFit.Core.csproj", "{E5A082F7-F0EA-44F7-9AB0-0273E5DFAD58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoldierFit.Infrastructure", "SoldierFit.Infrastructure\SoldierFit.Infrastructure.csproj", "{0B0C228A-05D3-49B9-9450-E944DACBF4CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{281484AD-DAED-45B6-A96D-0C4AC9C5EE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{281484AD-DAED-45B6-A96D-0C4AC9C5EE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{281484AD-DAED-45B6-A96D-0C4AC9C5EE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A082F7-F0EA-44F7-9AB0-0273E5DFAD58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A082F7-F0EA-44F7-9AB0-0273E5DFAD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A082F7-F0EA-44F7-9AB0-0273E5DFAD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A082F7-F0EA-44F7-9AB0-0273E5DFAD58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B0C228A-05D3-49B9-9450-E944DACBF4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0C228A-05D3-49B9-9450-E944DACBF4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0C228A-05D3-49B9-9450-E944DACBF4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0C228A-05D3-49B9-9450-E944DACBF4CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
