@@ -62,15 +62,3 @@
         }
     }
 }
-
-/*
-
-
-This commit consolidates the configuration of Identity and DbContext services into the ServiceCollection static class. 
-This refactoring simplifies the Program.cs file and improves organization.
-
-- Identity service configuration now handled in AddApplicationIdentity method.
-- DbContext configuration moved to AddApplicationDbContext method for clearer dependency injection setup.
-
-This change aims to enhance code readability and maintainability.
- */
