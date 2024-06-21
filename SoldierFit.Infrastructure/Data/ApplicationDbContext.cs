@@ -44,6 +44,8 @@
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new AthleteWorkoutConfiguration());
+            builder.ApplyConfiguration(new AthleteConfiguration());
+            builder.ApplyConfiguration(new WorkoutConfiguration());
         }
     }
 }

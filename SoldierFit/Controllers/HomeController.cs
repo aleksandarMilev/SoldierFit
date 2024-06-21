@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SoldierFit.Models;
-using System.Diagnostics;
-
-namespace SoldierFit.Controllers
+﻿namespace SoldierFit.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using SoldierFit.Models;
+    using System.Diagnostics;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
