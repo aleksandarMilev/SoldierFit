@@ -1,8 +1,8 @@
-﻿namespace SoldierFit.Extensions
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using SoldierFit.Data;
+    using SoldierFit.Infrastructure.Data;
 
     public static class ServiceCollection
     {

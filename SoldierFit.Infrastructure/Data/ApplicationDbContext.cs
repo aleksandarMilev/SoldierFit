@@ -1,4 +1,4 @@
-﻿namespace SoldierFit.Data
+﻿namespace SoldierFit.Infrastructure.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
