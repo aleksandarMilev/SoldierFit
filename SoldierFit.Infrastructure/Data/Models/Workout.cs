@@ -42,7 +42,7 @@
         public string Description { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the date when the workout was performed.
+        /// Gets or sets the image URL for the workout
         /// </summary>
         [Required]
         [MaxLength(WorkoutImageUrlMaxLength)]

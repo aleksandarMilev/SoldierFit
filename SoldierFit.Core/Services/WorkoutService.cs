@@ -21,6 +21,23 @@
             return await repository
                 .AllAsNoTracking<Workout>()
                 .OrderByDescending(w => w.Date)
+                .Take(3)
+                .Select(w => new WorkoutDto()
+                {
+                    Id = w.Id,
+                    Title = w.Title,
+                    Date = w.Date,
+                    Description = w.Description,
+                    ImageUrl = w.ImageUrl
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<WorkoutDto>> AllWorkoutsAsync()
+        {
+            return await repository
+                .AllAsNoTracking<Workout>()
+                .OrderByDescending(w => w.Date)
                 .Select(w => new WorkoutDto()
                 {
                     Id = w.Id,

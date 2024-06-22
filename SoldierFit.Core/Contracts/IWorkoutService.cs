@@ -5,5 +5,7 @@
     public interface IWorkoutService
     {
         Task<IEnumerable<WorkoutDto>> LastThreeWorkoutsAsync();
+
+        Task<IEnumerable<WorkoutDto>> AllWorkoutsAsync();
     }
 }
