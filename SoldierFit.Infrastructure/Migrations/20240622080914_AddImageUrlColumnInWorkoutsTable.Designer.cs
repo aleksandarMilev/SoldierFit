@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoldierFit.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using SoldierFit.Infrastructure.Data;
 namespace SoldierFit.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240622080914_AddImageUrlColumnInWorkoutsTable")]
+    partial class AddImageUrlColumnInWorkoutsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,52 +296,6 @@ namespace SoldierFit.Infrastructure.Migrations
                     b.ToTable("Athletes");
 
                     b.HasComment("Athletes table");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Age = 30,
-                            Email = "test1@abv.bg",
-                            FirstName = "John",
-                            LastName = "Doe",
-                            MiddleName = "A.",
-                            PhoneNumber = "111111111",
-                            UserId = "8c2ec506-706c-4cb2-81eb-0bfcf47e7965"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Age = 25,
-                            Email = "test2@abv.bg",
-                            FirstName = "Jane",
-                            LastName = "Smith",
-                            MiddleName = "B.",
-                            PhoneNumber = "222222222",
-                            UserId = "a117846b-9438-445c-b8f5-376366419a71"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Age = 35,
-                            Email = "test3@abv.bg",
-                            FirstName = "Michael",
-                            LastName = "Johnson",
-                            MiddleName = "C.",
-                            PhoneNumber = "333333333",
-                            UserId = "8e19ada9-b7ed-4f16-82b3-7f4f1924ff64"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Age = 28,
-                            Email = "test4@abv.bg",
-                            FirstName = "Emily",
-                            LastName = "Brown",
-                            MiddleName = "D.",
-                            PhoneNumber = "444444444",
-                            UserId = "0c12411c-88c2-4853-9fd5-7f6a9630e41e"
-                        });
                 });
 
             modelBuilder.Entity("SoldierFit.Infrastructure.Data.Models.AthleteWorkout", b =>
@@ -397,40 +353,6 @@ namespace SoldierFit.Infrastructure.Migrations
                     b.ToTable("Workouts");
 
                     b.HasComment("Workouts table");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Date = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Murph is a CrossFit Hero workout that stands as a testament to the enduring legacy of U.S. Navy SEAL Lt. Michael Murphy, who died heroically in the line of duty in Afghanistan on June 28, 2005.",
-                            ImageUrl = "https://i.shgcdn.com/8193030c-15da-486d-8fe0-1318413edd40/-/format/auto/-/preview/3000x3000/-/quality/lighter/",
-                            Title = "Murph"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Date = new DateTime(2024, 6, 25, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The Fran Workout is a series of 45 total thrusters and 45 total pull-ups performed in the following combination within a 10-minute time cap.",
-                            ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWPoJhv5EnRXYvQmgLFnL4HGVVvu0-49ngRA&usqp=CAU",
-                            Title = "Fran"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Date = new DateTime(2024, 6, 25, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Cindy is 5 pullups, 10 pushups and 15 squats for 20 minutes. A great, simple yet challenging workout. I would recommend most Athletes do Cindy with a goal of hitting 20 rounds. 20 is a great score.",
-                            ImageUrl = "https://i.pinimg.com/736x/c2/70/30/c27030bf53de1bad2388a6e35eb6789a.jpg",
-                            Title = "Cindy"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Date = new DateTime(2024, 6, 25, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The CrossFit workout Grace consists of 30 reps of one exercise — the clean & jerk — performed as quickly as possible.",
-                            ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVO4ZFlVqlkA0sX7WlOaJZXuKjPucVVOhfKA&usqp=CAU",
-                            Title = "Weekend Hike"
-                        });
                 });
 
             modelBuilder.Entity("AthleteWorkout", b =>

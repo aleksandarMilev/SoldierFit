@@ -42,6 +42,14 @@
         public string Description { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the date when the workout was performed.
+        /// </summary>
+        [Required]
+        [MaxLength(WorkoutImageUrlMaxLength)]
+        [Comment("Workout image url")]
+        public string ImageUrl { get; set; } = string.Empty;
+
+        /// <summary>
         /// Navigation property for the athletes who performed the workout.
         /// </summary>
         public ICollection<Athlete> Athletes { get; set; } = new List<Athlete>();

@@ -54,5 +54,15 @@
         /// Maximum length for workout descriptions.
         /// </summary>
         public const int WorkoutDescriptionMaxLength = 600;
+
+        /// <summary>
+        /// Minimum length for workout image url.
+        /// </summary>
+        public const int WorkoutImageUrlMinLength = 10;
+
+        /// <summary>
+        /// Maximum length for workout image url.
+        /// </summary>
+        public const int WorkoutImageUrlMaxLength = 255;
     }
 }
