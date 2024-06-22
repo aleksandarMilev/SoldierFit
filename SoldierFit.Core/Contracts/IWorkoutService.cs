@@ -1,11 +1,11 @@
 ﻿namespace SoldierFit.Core.Contracts
 {
-    using SoldierFit.Core.Models;
+    using SoldierFit.Core.Models.Workout;
 
     public interface IWorkoutService
     {
-        Task<IEnumerable<WorkoutDto>> LastThreeWorkoutsAsync();
+        Task<IEnumerable<WorkoutIndexViewModel>> LastThreeWorkoutsAsync();
 
-        Task<IEnumerable<WorkoutDto>> AllWorkoutsAsync();
+        Task<IEnumerable<WorkoutIndexViewModel>> AllWorkoutsAsync();
     }
 }

@@ -2,7 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using SoldierFit.Core.Contracts;
-    using SoldierFit.Core.Models;
+    using SoldierFit.Core.Models.Workout;
     using SoldierFit.Infrastructure.Common;
     using SoldierFit.Infrastructure.Data.Models;
     using System.Collections.Generic;
@@ -16,13 +16,13 @@
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<WorkoutDto>> LastThreeWorkoutsAsync()
+        public async Task<IEnumerable<WorkoutIndexViewModel>> LastThreeWorkoutsAsync()
         {
             return await repository
                 .AllAsNoTracking<Workout>()
                 .OrderByDescending(w => w.Date)
                 .Take(3)
-                .Select(w => new WorkoutDto()
+                .Select(w => new WorkoutIndexViewModel()
                 {
                     Id = w.Id,
                     Title = w.Title,
@@ -33,12 +33,12 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<WorkoutDto>> AllWorkoutsAsync()
+        public async Task<IEnumerable<WorkoutIndexViewModel>> AllWorkoutsAsync()
         {
             return await repository
                 .AllAsNoTracking<Workout>()
                 .OrderByDescending(w => w.Date)
-                .Select(w => new WorkoutDto()
+                .Select(w => new WorkoutIndexViewModel()
                 {
                     Id = w.Id,
                     Title = w.Title,

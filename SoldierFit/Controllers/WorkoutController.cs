@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using SoldierFit.Core.Contracts;
-    using SoldierFit.Core.Models;
+    using SoldierFit.Core.Models.Workout;
 
     public class WorkoutController : BaseController
     {
@@ -17,7 +17,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<WorkoutDto> models;
+            IEnumerable<WorkoutIndexViewModel> models;
 
             if (User?.Identity?.IsAuthenticated ?? false)
             {

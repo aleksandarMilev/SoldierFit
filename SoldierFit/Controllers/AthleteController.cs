@@ -1,6 +1,9 @@
 ﻿namespace SoldierFit.Controllers
 {
-    public class AthleteController
+    using Microsoft.AspNetCore.Mvc;
+    using SoldierFit.Core.Contracts;
+
+    public class AthleteController : BaseController
     {
     }
 }
