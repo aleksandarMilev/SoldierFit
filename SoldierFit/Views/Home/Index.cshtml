@@ -2,7 +2,39 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <h1 class="display-4">Welcome to SoldierFit</h1>
+    <p class="lead">Your ultimate fitness companion</p>
+    <hr class="my-4 border-warning" />
+    <p class="mb-5">Manage your workouts and track your progress with ease.</p>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Athletes</h5>
+                    <p class="card-text">View registered athletes.</p>
+                    <a asp-controller="Athletes" asp-action="Index" class="btn btn-primary">View Athletes &raquo;</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Workouts</h5>
+                    <p class="card-text">View all workouts.</p>
+                    <a asp-controller="Workouts" asp-action="Index" class="btn btn-primary">View Workouts &raquo;</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Progress</h5>
+                    <p class="card-text">Track your fitness progress over time.</p>
+                    <a asp-controller="Progress" asp-action="Index" class="btn btn-primary">Track Progress &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
