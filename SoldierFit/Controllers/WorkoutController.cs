@@ -1,10 +1,11 @@
 ﻿namespace SoldierFit.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Models;
 
-    public class WorkoutController : Controller
+    public class WorkoutController : BaseController
     {
         private readonly IWorkoutService service;
 
@@ -13,6 +14,7 @@
             this.service = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             IEnumerable<WorkoutDto> models;

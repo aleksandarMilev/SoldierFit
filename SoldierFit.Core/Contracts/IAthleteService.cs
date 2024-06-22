@@ -2,5 +2,5 @@
 {
     public interface IAthleteService
     {
-    }
-}
+        Task<bool> ExistsByIdAsync(string id);
+    }}
