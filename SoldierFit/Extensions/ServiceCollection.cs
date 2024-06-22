@@ -2,6 +2,9 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using SoldierFit.Core.Contracts;
+    using SoldierFit.Core.Services;
+    using SoldierFit.Infrastructure.Common;
     using SoldierFit.Infrastructure.Data;
 
     public static class ServiceCollection
@@ -13,6 +16,9 @@
         /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IWorkoutService, WorkoutService>();
+            services.AddScoped<IAthleteService, AthleteService>();
+
             return services;
         }
 
@@ -35,6 +41,8 @@
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            services.AddScoped<IRepository, Repository>();
 
             if (environment.IsDevelopment())
             {
