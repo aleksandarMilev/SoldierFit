@@ -27,7 +27,7 @@
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the date when the workout was performed.
+        /// Gets or sets the date when the workout will be performed.
         /// </summary>
         [Required]
         [Comment("Workout date")]

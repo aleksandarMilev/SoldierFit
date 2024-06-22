@@ -1,7 +1,7 @@
 ﻿namespace SoldierFit.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Mvc;
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Models.Workout;
 
@@ -17,18 +17,16 @@
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<WorkoutIndexViewModel> models;
+            var pastModels = await service.GetLastThreePastWorkoutsAsync();
+            var presentModels = await service.GetLastThreeFutureWorkoutsAsync();
 
-            if (User?.Identity?.IsAuthenticated ?? false)
+            var model = new WorkoutsSummaryViewModel
             {
-                models = await service.AllWorkoutsAsync();
-            }
-            else
-            {
-                models = await service.LastThreeWorkoutsAsync();
-            }
+                PastWorkouts = pastModels,
+                FutureWorkouts = presentModels,
+            };
 
-            return View(models);
+			return View(model);
         }
     }
 }

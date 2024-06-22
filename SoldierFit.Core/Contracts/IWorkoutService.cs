@@ -4,8 +4,8 @@
 
     public interface IWorkoutService
     {
-        Task<IEnumerable<WorkoutIndexViewModel>> LastThreeWorkoutsAsync();
+        Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreeFutureWorkoutsAsync();
 
-        Task<IEnumerable<WorkoutIndexViewModel>> AllWorkoutsAsync();
-    }
+        Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreePastWorkoutsAsync();
+	}
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WorkoutIndexViewModel>
+﻿@model WorkoutsSummaryViewModel
 
 @{
     ViewData["Title"] = "Workouts";
@@ -10,25 +10,77 @@
     <hr />
 
     <div class="row">
-        @foreach (var workout in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@workout.Title</h5>
-                        <p class="card-text">@workout.Description</p>
-                        <p class="card-text"><small class="text-muted">Performed on @workout.Date.ToShortDateString()</small></p>
-                    </div>
+        <div class="">
+            <h2 class="text-center">Past Workouts</h2>
+            <hr />
+            <div class="d-flex justify-content-center">
+                <div class="row">
+                    @if (Model.PastWorkouts.Any())
+                    {
+                        @foreach (var workout in Model.PastWorkouts)
+                        {
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@workout.Title</h5>
+                                        <p class="card-text">@workout.Description</p>
+                                        <p class="card-text"><small class="text-muted">Performed on @workout.Date.ToShortDateString()</small></p>
+                                        @if (isAuthenticated)
+                                        {
+                                            <a asp-controller="Workout" asp-action="Details" asp-route-id="@workout.Id" class="btn btn-primary btn-sm">View Details</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No past workouts available.</p>
+                    }
                 </div>
             </div>
-        }
+        </div>
 
-        @if (!isAuthenticated)
-        {
-            <div class="col-md-12 mt-4 text-center">
-                <a href="~/Identity/Account/Login" class="btn btn-primary">Log in to view more workouts</a>
+        <div class="">
+            <h2 class="text-center">Future Workouts</h2>
+            <hr />
+            <div class="d-flex justify-content-center">
+                <div class="row">
+                    @if (Model.FutureWorkouts.Any())
+                    {
+                        @foreach (var workout in Model.FutureWorkouts)
+                        {
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@workout.Title</h5>
+                                        <p class="card-text">@workout.Description</p>
+                                        <p class="card-text"><small class="text-muted">Scheduled for @workout.Date.ToShortDateString()</small></p>
+                                        @if (isAuthenticated)
+                                        {
+                                            <a asp-controller="Workout" asp-action="Details" asp-route-id="@workout.Id" class="btn btn-primary btn-sm">View Details</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No future workouts scheduled.</p>
+                    }
+                </div>
             </div>
-        }
+        </div>
     </div>
+
+    @if (!isAuthenticated)
+    {
+        <div class="col-md-12 mt-4 text-center">
+            <a href="~/Identity/Account/Login" class="btn btn-primary">Log in so you can see details for each WOD!</a>
+        </div>
+    }
 </div>
