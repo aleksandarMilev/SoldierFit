@@ -1,6 +1,6 @@
 ﻿namespace SoldierFit.Core.Models
 {
-    public class Workout
+    public class WorkoutDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
