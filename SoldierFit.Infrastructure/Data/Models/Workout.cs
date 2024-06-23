@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using static SoldierFit.Infrastructure.Constants.DataConstraints;
 
     /// <summary>
@@ -50,8 +51,16 @@
         public string ImageUrl { get; set; } = string.Empty;
 
         /// <summary>
-        /// Navigation property for the athletes who performed the workout.
+        /// Gets or sets the indentifier of the Athlete user which added the workout
         /// </summary>
-        public ICollection<Athlete> Athletes { get; set; } = new List<Athlete>();
+        [Required]
+        [Comment("Athelte added the workout identifier")]
+        public int AthleteId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Athlete user which added the workout
+        /// </summary>
+        [ForeignKey(nameof(AthleteId))]
+        public Athlete Athlete { get; set; } = null!;
     }
 }

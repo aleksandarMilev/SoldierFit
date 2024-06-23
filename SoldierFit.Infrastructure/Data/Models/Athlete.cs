@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using static SoldierFit.Infrastructure.Constants.DataConstraints;
@@ -82,10 +81,5 @@
         /// </summary>
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
-
-        /// <summary>
-        /// Gets or sets the collection of workouts associated with this athlete.
-        /// </summary>
-        public ICollection<Workout> Workouts { get; set; } = new List<Workout>();
     }
 }

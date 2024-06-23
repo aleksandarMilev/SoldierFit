@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using SoldierFit.Infrastructure.Data.Configurations;
     using SoldierFit.Infrastructure.Data.Models;
 
     /// <summary>
@@ -31,19 +30,12 @@
         public DbSet<Workout> Workouts { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the DbSet representing the many-to-many relationship between athletes and workouts.
-        /// </summary>
-        public DbSet<AthleteWorkout> AthletesWorkouts { get; set; } = null!;
-
-        /// <summary>
         /// Configures the model by applying entity configurations.
         /// </summary>
         /// <param name="builder">The model builder used to configure the model.</param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.ApplyConfiguration(new AthleteWorkoutConfiguration());
         }
     }
 }
