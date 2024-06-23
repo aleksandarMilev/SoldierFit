@@ -8,6 +8,6 @@
 
         public const string ValueMessage = "The field {0} should in the range {1} - {2}";
 
-        public const string PhoneExistsMessage = "Athlete with phone - {} already exists";
+        public const string PhoneExistsMessage = "Athlete with phone - {0} already exists";
     }
 }

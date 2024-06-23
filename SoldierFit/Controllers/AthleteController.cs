@@ -36,7 +36,7 @@
         {
             if (await service.UserWithPhoneExistsAlready(model.PhoneNumber))
             {
-                ModelState.AddModelError(nameof(model.PhoneNumber), PhoneExistsMessage);
+                ModelState.AddModelError(nameof(model.PhoneNumber), string.Format(PhoneExistsMessage, model.PhoneNumber));
             }
 
             if (!ModelState.IsValid)
@@ -51,8 +51,8 @@
                 model.MiddleName,
                 model.LastName,
                 model.Age,
-                user.Email,
                 model.PhoneNumber,
+                user.Email,
                 User.GetId());
 
             return RedirectToAction("Index", "Workout");
