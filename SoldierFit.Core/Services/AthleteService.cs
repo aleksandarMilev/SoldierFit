@@ -36,6 +36,7 @@
             };
 
             await repository.AddAsync(athlete);
+            await repository.SaveChangesAsync();
         }
 
         public async Task<bool> ExistByIdAsync(string userId)
