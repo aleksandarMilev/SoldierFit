@@ -1,5 +1,6 @@
 ﻿namespace SoldierFit.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Models.Athlete;
@@ -9,10 +10,12 @@
     public class AthleteController : BaseController
     {
         private readonly IAthleteService service;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public AthleteController(IAthleteService service)
+        public AthleteController(IAthleteService service, UserManager<IdentityUser> userManager)
         {
-            this.service = service;   
+            this.service = service;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -41,12 +44,14 @@
                 return View(model);
             }
 
+            IdentityUser user = await userManager.GetUserAsync(User);
+
             await service.CreateAsync(
                 model.FirstName,
                 model.MiddleName,
                 model.LastName,
                 model.Age,
-                model.Email,
+                user.Email,
                 model.PhoneNumber,
                 User.GetId());
 

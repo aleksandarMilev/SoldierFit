@@ -41,12 +41,6 @@
         [Phone]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = RequiredMessage)]
-        [StringLength(
-            AthleteEmailMaxLength,
-            MinimumLength = AthleteEmailMinLength,
-            ErrorMessage = LengthMessage)]
-        [EmailAddress]
         public string Email { get; set; } = string.Empty;
     }
 }
