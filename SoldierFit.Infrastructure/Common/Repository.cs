@@ -13,7 +13,6 @@
             this.context = context;
         }
 
-
         public IQueryable<T> All<T>() where T : class
             => DbSet<T>();
 
