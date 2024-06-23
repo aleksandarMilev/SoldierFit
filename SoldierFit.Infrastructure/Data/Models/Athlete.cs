@@ -10,6 +10,7 @@
     /// <summary>
     /// Represents an athlete registered in the application.
     /// </summary>
+    [Index(nameof(PhoneNumber), IsUnique = true)]
     [Comment("Athletes table")]
     public class Athlete
     {
