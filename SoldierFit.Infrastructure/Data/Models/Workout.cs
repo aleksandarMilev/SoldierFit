@@ -35,6 +35,13 @@
         public DateTime Date { get; set; }
 
         /// <summary>
+        /// Gets or sets the time when the workout will be performed
+        /// </summary>
+        [Required]
+        [Comment("The start time of the workout")]
+        public TimeSpan Time { get; set; }
+
+        /// <summary>
         /// Gets or sets the description of the workout.
         /// </summary>
         [Required]
