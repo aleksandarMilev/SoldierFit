@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SoldierFit.Infrastructure.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class InitCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -154,6 +154,56 @@ namespace SoldierFit.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Athletes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Athlete identifier")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Athlete first name"),
+                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Athlete middle name"),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Athlete last name"),
+                    Age = table.Column<int>(type: "int", nullable: false, comment: "Athlete age"),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false, comment: "Athlete phone number"),
+                    Email = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false, comment: "Athlete email address"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Athletes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Athletes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Athletes table");
+
+            migrationBuilder.CreateTable(
+                name: "Workouts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Workout identifier")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Workout title"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Workout date"),
+                    Description = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false, comment: "Workout description"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Workout image url"),
+                    AthleteId = table.Column<int>(type: "int", nullable: false, comment: "Athelte added the workout identifier")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Workouts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Workouts_Athletes_AthleteId",
+                        column: x => x.AthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "Workouts table");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +242,22 @@ namespace SoldierFit.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Athletes_PhoneNumber",
+                table: "Athletes",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Athletes_UserId",
+                table: "Athletes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workouts_AthleteId",
+                table: "Workouts",
+                column: "AthleteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -212,7 +278,13 @@ namespace SoldierFit.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Workouts");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Athletes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

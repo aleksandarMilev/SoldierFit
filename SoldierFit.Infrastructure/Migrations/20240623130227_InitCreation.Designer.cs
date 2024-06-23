@@ -12,8 +12,8 @@ using SoldierFit.Infrastructure.Data;
 namespace SoldierFit.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240623123424_RemoveMappingTable")]
-    partial class RemoveMappingTable
+    [Migration("20240623130227_InitCreation")]
+    partial class InitCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
