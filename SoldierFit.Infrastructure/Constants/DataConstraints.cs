@@ -36,6 +36,16 @@
         public const int AthletePhoneMaxLength = 15;
 
         /// <summary>
+        /// Minimum value for athlete age.
+        /// </summary>
+        public const int AthleteAgeMinValue = 5;
+
+        /// <summary>
+        /// Maximum value for athlete age.
+        /// </summary>
+        public const int AthleteAgeMaxValue = 100;
+
+        /// <summary>
         /// Minimum length for workout titles.
         /// </summary>
         public const int WorkoutTitleMinLength = 2;
