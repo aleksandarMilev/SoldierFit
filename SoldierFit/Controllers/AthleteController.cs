@@ -52,7 +52,7 @@
                 model.LastName,
                 model.Age,
                 model.PhoneNumber,
-                user.Email,
+                user.UserName,
                 User.GetId());
 
             return RedirectToAction("Index", "Workout");

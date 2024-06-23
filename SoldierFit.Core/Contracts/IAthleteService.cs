@@ -14,5 +14,7 @@
         Task<bool> ExistByIdAsync(string userId);
 
         Task<bool> UserWithPhoneExistsAlready(string phoneNumber);
+
+        Task<int?> GetAthleteIdAsync(string userId);
     }
 }

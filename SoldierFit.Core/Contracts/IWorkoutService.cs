@@ -7,5 +7,15 @@
         Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreeFutureWorkoutsAsync();
 
         Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreePastWorkoutsAsync();
-	}
+
+        Task<bool> WorkoutWithSameNameExistsAsync(string title);
+
+        Task CreateAsync(
+            string title,
+            DateTime date,
+            TimeSpan time,
+            string description,
+            string imageUrl,
+            int athleteId);
+    }
 }

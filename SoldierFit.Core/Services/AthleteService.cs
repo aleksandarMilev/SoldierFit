@@ -51,6 +51,15 @@
             return await repository
                 .AllAsNoTracking<Athlete>()
                 .AnyAsync(a => a.PhoneNumber == phoneNumber);
-        } 
+        }
+
+        public async Task<int?> GetAthleteIdAsync(string userId)
+        {
+            Athlete? athlete = await repository
+                .AllAsNoTracking<Athlete>()
+                .FirstOrDefaultAsync(a => a.UserId == userId);
+
+            return athlete?.Id;
+        }
     }
 }

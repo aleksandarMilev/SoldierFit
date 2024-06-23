@@ -7,7 +7,7 @@
 	using SoldierFit.Infrastructure.Data.Models;
 	using System.Collections.Generic;
 
-	public class WorkoutService : IWorkoutService
+    public class WorkoutService : IWorkoutService
     {
         private readonly IRepository repository;
 
@@ -51,5 +51,28 @@
                })
                .ToListAsync();
 		}
+
+        public async Task<bool> WorkoutWithSameNameExistsAsync(string title)
+        {
+            return await repository
+                .AllAsNoTracking<Workout>()
+                .AnyAsync(w => w.Title == title);
+        }
+
+        public async Task CreateAsync(string title, DateTime date, TimeSpan time, string description, string imageUrl, int athleteId)
+        {
+            Workout workout = new()
+            {
+                Title = title,
+                Date = date,
+                Time = time,
+                Description = description,
+                ImageUrl = imageUrl,
+                AthleteId = athleteId,
+            };
+
+            await repository.AddAsync(workout);
+            await repository.SaveChangesAsync();
+        }
     }
 }

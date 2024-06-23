@@ -1,0 +1,47 @@
+﻿@model CreateWorkoutViewModel
+
+@{
+    ViewData["Title"] = "Create Workout";
+    string today = DateTime.Now.ToString("yyyy-MM-dd");
+    string minDate = DateTime.Now.ToString("yyyy-MM-dd");
+    string maxDate = DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd");
+}
+
+<div class="container mt-5">
+    <h1 class="display-4">Create a New Workout</h1>
+    <hr />
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Date" class="control-label"></label>
+            <input asp-for="Date" class="form-control" type="date" value="@today" min="@minDate" max="@maxDate" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Time" class="control-label"></label>
+            <input asp-for="Time" class="form-control" type="time" />
+            <span asp-validation-for="Time" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <input asp-for="ImageUrl" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

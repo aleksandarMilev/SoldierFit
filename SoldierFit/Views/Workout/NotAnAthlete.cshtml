@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Not an Athlete";
+}
+
+<div class="container mt-5">
+    <h1 class="display-4">Not an Athlete</h1>
+    <hr />
+    <div class="alert alert-warning" role="alert">
+        Sorry, you must be an athlete to add a workout.
+    </div>
+    <p>
+        Please become an athlete to gain access to this functionality.
+    </p>
+    <a href="@Url.Action("Become", "Athlete")" class="btn btn-primary">Become an Athlete</a>
+</div>
