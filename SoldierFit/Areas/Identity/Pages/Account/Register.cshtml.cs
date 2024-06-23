@@ -9,6 +9,7 @@ namespace SoldierFit.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+    using NuGet.Packaging.Signing;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Threading;
@@ -82,9 +83,16 @@ namespace SoldierFit.Areas.Identity.Pages.Account
         }
 
 
-        public void OnGetAsync(string returnUrl = null)
+        public IActionResult OnGetAsync(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             ReturnUrl = returnUrl;
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
