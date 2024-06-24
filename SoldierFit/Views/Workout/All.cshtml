@@ -12,7 +12,7 @@
     <hr />
 
     <div class="row">
-        <div class="">
+        <div>
             <h2 class="text-center">Past Workouts</h2>
             <hr />
             <div class="d-flex justify-content-center">
@@ -21,12 +21,18 @@
                     {
                         @foreach (var workout in Model.PastWorkouts)
                         {
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
                                     <div class="card-body">
                                         <h5 class="card-title">@workout.Title</h5>
                                         <p class="card-text">@workout.BriefDescription</p>
+                                        <ul class="list-unstyled">
+                                            <li><strong>Time:</strong> @workout.Time.ToString("hh\\:mm")</li>
+                                            <li><strong>Category:</strong> @workout.CategoryName</li>
+                                            <li><strong>Max Participants:</strong> @workout.MaxParticipants</li>
+                                            <li><strong>Is For Beginners:</strong> @{string isForBeginners = workout.IsForBeginners ? "yes" : "no";} @isForBeginners</li>
+                                        </ul>
                                         <p class="card-text"><small class="text-muted">Performed on @workout.Date.ToShortDateString()</small></p>
                                         @if (isAuthenticated)
                                         {
@@ -45,7 +51,7 @@
             </div>
         </div>
 
-        <div class="">
+        <div>
             <h2 class="text-center">Future Workouts</h2>
             <hr />
             <div class="d-flex justify-content-center">
@@ -54,12 +60,18 @@
                     {
                         @foreach (var workout in Model.FutureWorkouts)
                         {
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
                                     <div class="card-body">
                                         <h5 class="card-title">@workout.Title</h5>
                                         <p class="card-text">@workout.BriefDescription</p>
+                                        <ul class="list-unstyled">
+                                            <li><strong>Time:</strong> @workout.Time.ToString("hh\\:mm")</li>
+                                            <li><strong>Category:</strong> @workout.CategoryName</li>
+                                            <li><strong>Max Participants:</strong> @workout.MaxParticipants</li>
+                                            <li><strong>Is For Beginners:</strong> @{string isForBeginners = workout.IsForBeginners ? "yes" : "no";} @isForBeginners</li>
+                                        </ul>
                                         <p class="card-text"><small class="text-muted">Scheduled for @workout.Date.ToShortDateString()</small></p>
                                         @if (isAuthenticated)
                                         {
