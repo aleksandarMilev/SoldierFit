@@ -20,7 +20,7 @@
         {
             return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => w.Date < DateTime.Now)
+               .Where(w => w.Date.Date < DateTime.Now.Date)
                .OrderBy(w => w.Date)
                .Take(3)
                .Select(w => new WorkoutIndexViewModel()
@@ -38,7 +38,7 @@
 		{ 
 			return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => w.Date > DateTime.Now)
+               .Where(w => w.Date.Date >= DateTime.Now.Date)
                .OrderBy(w => w.Date)
                .Take(3)
                .Select(w => new WorkoutIndexViewModel()
