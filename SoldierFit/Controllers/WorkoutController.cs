@@ -5,6 +5,7 @@
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Models.Workout;
     using System.Security.Claims;
+    using static SoldierFit.Infrastructure.Constants.MessageConstants;
 
     public class WorkoutController : BaseController
     {
@@ -34,8 +35,15 @@
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId == null)
+            {
+                return View("NotAnAthlete");
+            }
+
             CreateWorkoutViewModel model = new();
 
             return View(model);
@@ -44,21 +52,31 @@
         [HttpPost]
         public async Task<IActionResult> Create(CreateWorkoutViewModel model)
         {
-            if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
-            {
-                ModelState.AddModelError(nameof(model.Title), "");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
             if (athleteId == null)
             {
                 return View("NotAnAthlete");
+            }
+
+            if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
+            {
+                ModelState.AddModelError(nameof(model.Title), string.Format(WorkoutWithSameNameExists, model.Title));
+            }
+
+            if (!workoutService.WorkoutDateIsInRange(model.Date))
+            {
+                ModelState.AddModelError(nameof(model.Date), string.Format(InvalidDate, DateTime.Now.ToShortDateString(), DateTime.Now.AddMonths(1).ToShortDateString()));
+            }
+
+            if (!workoutService.WorkoutTimeIsAtLeastThreeHoursInFuture(model.Date, model.Time))
+            {
+                ModelState.AddModelError(nameof(model.Time), InvalidTime);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
             await workoutService.CreateAsync(

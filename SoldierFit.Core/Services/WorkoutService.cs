@@ -74,5 +74,21 @@
             await repository.AddAsync(workout);
             await repository.SaveChangesAsync();
         }
+
+        public bool WorkoutDateIsInRange(DateTime date)
+        {
+            DateTime today = DateTime.Now.Date;
+            DateTime maxDate = today.AddMonths(1);
+
+            return date >= today && date <= maxDate;
+        }
+
+        public bool WorkoutTimeIsAtLeastThreeHoursInFuture(DateTime date, TimeSpan time)
+        {
+            DateTime currentDateTime = DateTime.Now;
+            DateTime workoutDateTime = date.Date + time;
+
+            return workoutDateTime >= currentDateTime.AddHours(3);
+        }
     }
 }

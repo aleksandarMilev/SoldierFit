@@ -1,6 +1,7 @@
 ﻿namespace SoldierFit.Core.Models.Workout
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Runtime.CompilerServices;
     using static SoldierFit.Infrastructure.Constants.DataConstraints;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
 

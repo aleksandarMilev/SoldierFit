@@ -17,5 +17,9 @@
             string description,
             string imageUrl,
             int athleteId);
+
+        public bool WorkoutDateIsInRange(DateTime date);
+
+        bool WorkoutTimeIsAtLeastThreeHoursInFuture(DateTime date, TimeSpan time);
     }
 }
