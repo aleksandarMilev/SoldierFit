@@ -79,13 +79,7 @@
                 return View(model);
             }
 
-            await workoutService.CreateAsync(
-                model.Title,
-                model.Date,
-                model.Time,
-                model.Description,
-                model.ImageUrl,
-                athleteId.Value);
+            await workoutService.CreateAsync(model, athleteId.Value);
 
             return RedirectToAction(nameof(All));
         }

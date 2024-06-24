@@ -26,7 +26,7 @@
                                     <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
                                     <div class="card-body">
                                         <h5 class="card-title">@workout.Title</h5>
-                                        <p class="card-text">@workout.Description</p>
+                                        <p class="card-text">@workout.BriefDescription</p>
                                         <p class="card-text"><small class="text-muted">Performed on @workout.Date.ToShortDateString()</small></p>
                                         @if (isAuthenticated)
                                         {
@@ -59,7 +59,7 @@
                                     <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
                                     <div class="card-body">
                                         <h5 class="card-title">@workout.Title</h5>
-                                        <p class="card-text">@workout.Description</p>
+                                        <p class="card-text">@workout.BriefDescription</p>
                                         <p class="card-text"><small class="text-muted">Scheduled for @workout.Date.ToShortDateString()</small></p>
                                         @if (isAuthenticated)
                                         {

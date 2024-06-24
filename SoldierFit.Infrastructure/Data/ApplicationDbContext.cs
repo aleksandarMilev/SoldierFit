@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using SoldierFit.Infrastructure.Data.Configurations;
     using SoldierFit.Infrastructure.Data.Models;
 
     /// <summary>
@@ -36,6 +37,8 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new WorkoutConfiguration());
         }
     }
 }

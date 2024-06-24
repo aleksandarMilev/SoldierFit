@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoldierFit.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using SoldierFit.Infrastructure.Data;
 namespace SoldierFit.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240624163340_AddCategotryColumnInWorkouts")]
+    partial class AddCategotryColumnInWorkouts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,12 +299,6 @@ namespace SoldierFit.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Athlete added the workout identifier");
 
-                    b.Property<string>("BriefDescription")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasComment("Brief description of the workout");
-
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -316,11 +312,11 @@ namespace SoldierFit.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasComment("Workout date");
 
-                    b.Property<string>("FullDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)")
-                        .HasComment("Full description of the workout");
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)")
+                        .HasComment("Workout description");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()

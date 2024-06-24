@@ -1,7 +1,7 @@
 ﻿namespace SoldierFit.Core.Models.Workout
 {
+    using SoldierFit.Infrastructure.Data.Enumerations;
     using System.ComponentModel.DataAnnotations;
-    using System.Runtime.CompilerServices;
     using static SoldierFit.Infrastructure.Constants.DataConstraints;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
 
@@ -26,10 +26,17 @@
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(
-            WorkoutDescriptionMaxLength,
-            MinimumLength = WorkoutDescriptionMinLength,
+            WorkoutBriefDescriptionMaxLength,
+            MinimumLength = WorkoutBriefDescriptionMinLength,
             ErrorMessage = LengthMessage)]
-        public string Description { get; set; } = string.Empty;
+        public string BriefDescription { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = RequiredMessage)]
+        [StringLength(
+            WorkoutFullDescriptionMaxLength,
+            MinimumLength = WorkoutFullDescriptionMinLength,
+            ErrorMessage = LengthMessage)]
+        public string FullDescription { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(
@@ -39,5 +46,21 @@
         [Display(Name = "Image URL")]
         [Url]
         public string ImageUrl { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Category")]
+        public Category CategoryName { get; set; }
+
+        [Required(ErrorMessage = RequiredMessage)]
+        [Display(Name = "Is For Beginners")]
+        public bool IsForBeginners { get; set; }
+
+        [Required(ErrorMessage = RequiredMessage)]
+        [Range(
+            WorkoutParticipantsMinValue,
+            WorkoutParticipantsMaxValue,
+            ErrorMessage = MaxParticipantsErrorMessage)]
+        [Display(Name = "Max Participants")]
+        public int MaxParticipants { get; set; }
     }
 }

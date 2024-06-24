@@ -28,7 +28,7 @@
                    Id = w.Id,
                    Title = w.Title,
                    Date = w.Date,
-                   Description = w.Description,
+                   BriefDescription = w.BriefDescription,
                    ImageUrl = w.ImageUrl
                })
                .ToListAsync();
@@ -46,7 +46,7 @@
 	               Id = w.Id,
 	               Title = w.Title,
 	               Date = w.Date,
-	               Description = w.Description,
+	               BriefDescription = w.BriefDescription,
 	               ImageUrl = w.ImageUrl
                })
                .ToListAsync();
@@ -59,16 +59,21 @@
                 .AnyAsync(w => w.Title == title);
         }
 
-        public async Task CreateAsync(string title, DateTime date, TimeSpan time, string description, string imageUrl, int athleteId)
+        public async Task CreateAsync(CreateWorkoutViewModel model, int athleteId)
         {
             Workout workout = new()
             {
-                Title = title,
-                Date = date,
-                Time = time,
-                Description = description,
-                ImageUrl = imageUrl,
-                AthleteId = athleteId,
+                Title = model.Title,
+                Date = model.Date,
+                Time = model.Time,
+                BriefDescription = model.BriefDescription,
+                FullDescription = model.FullDescription,
+                ImageUrl = model.ImageUrl,
+                CategoryName = model.CategoryName,
+                IsForBeginners = model.IsForBeginners,
+                MaxParticipants = model.MaxParticipants,
+                CurrentParticipants = 0,
+                AthleteId = athleteId
             };
 
             await repository.AddAsync(workout);

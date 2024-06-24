@@ -56,14 +56,24 @@
         public const int WorkoutTitleMaxLength = 50;
 
         /// <summary>
-        /// Minimum length for workout descriptions.
+        /// Minimum length for the workout brief description.
         /// </summary>
-        public const int WorkoutDescriptionMinLength = 10;
+        public const int WorkoutBriefDescriptionMinLength = 10;
 
         /// <summary>
-        /// Maximum length for workout descriptions.
+        /// Maximum length for the workout brief description.
         /// </summary>
-        public const int WorkoutDescriptionMaxLength = 600;
+        public const int WorkoutBriefDescriptionMaxLength = 100;
+
+        /// <summary>
+        /// Minimum length for the workout full description.
+        /// </summary>
+        public const int WorkoutFullDescriptionMinLength = 50;
+
+        /// <summary>
+        /// Maximum length for the workout full description.
+        /// </summary>
+        public const int WorkoutFullDescriptionMaxLength = 2_000;
 
         /// <summary>
         /// Minimum length for workout image url.
@@ -74,5 +84,15 @@
         /// Maximum length for workout image url.
         /// </summary>
         public const int WorkoutImageUrlMaxLength = 255;
+
+        /// <summary>
+        /// Minimum value for workout participants count.
+        /// </summary>
+        public const int WorkoutParticipantsMinValue = 1;
+
+        /// <summary>
+        /// Maximum value for workout participants count.
+        /// </summary>
+        public const int WorkoutParticipantsMaxValue = 15;
     }
 }

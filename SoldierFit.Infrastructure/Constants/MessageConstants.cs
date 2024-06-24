@@ -15,5 +15,7 @@
         public const string InvalidDate = "The workout date must be between {0} and {1}. Please select a date within this range.";
 
         public const string InvalidTime = "The workout time must be at least 3 hours in the future from the current time.";
+
+        public const string MaxParticipantsErrorMessage = "Max participants must be between {0} and {1}.";
     }
 }
