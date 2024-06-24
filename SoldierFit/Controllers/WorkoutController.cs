@@ -20,7 +20,7 @@
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> All()
         {
             var pastModels = await workoutService.GetLastThreePastWorkoutsAsync();
             var presentModels = await workoutService.GetLastThreeFutureWorkoutsAsync();
@@ -87,7 +87,7 @@
                 model.ImageUrl,
                 athleteId.Value);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(All));
         }
     }
 }
