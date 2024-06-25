@@ -21,5 +21,7 @@
         Task<WorkoutDetailsViewModel?> GetWorkoutById(int id);
 
         Task<bool> ExistsByIdAsync(int id);
+
+        Task EditAsync(int workoutId, CreateWorkoutViewModel model);
     }
 }

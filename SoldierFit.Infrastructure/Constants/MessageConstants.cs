@@ -16,6 +16,6 @@
 
         public const string InvalidTime = "The workout time must be at least 3 hours in the future from the current time.";
 
-        public const string MaxParticipantsErrorMessage = "Max participants must be between {0} and {1}.";
+        public const string MaxParticipantsErrorMessage = "Max participants must be between {1} and {2}.";
     }
 }

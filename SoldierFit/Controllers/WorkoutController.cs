@@ -31,7 +31,7 @@
                 FutureWorkouts = presentModels,
             };
 
-			return View(model);
+            return View(model);
         }
 
         [HttpGet]
@@ -118,5 +118,91 @@
 
             return View(model);
         }
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId == null)
+            {
+                return View("NotAnAthlete");
+            }
+
+            if (!await workoutService.ExistsByIdAsync(id))
+            {
+                return View("WorkoutDoNotExist");
+            }
+
+            WorkoutDetailsViewModel? model = await workoutService.GetWorkoutById(id);
+
+            if (model!.AthleteId != athleteId)
+            {
+                return Unauthorized();
+            }
+
+            CreateWorkoutViewModel editModel = new()
+            {
+                Title = model.Title,
+                Date = model.Date,
+                Time = model.Time,
+                BriefDescription = model.BriefDescription,
+                FullDescription = model.FullDescription,
+                MaxParticipants = model.MaxParticipants,
+                ImageUrl = model.ImageUrl,
+                IsForBeginners = model.IsForBeginners,
+                CategoryName = model.CategoryName
+            };
+
+            return View(editModel);
+        }
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, CreateWorkoutViewModel model)
+		{
+			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+			if (athleteId == null)
+			{
+				return View("NotAnAthlete");
+			}
+
+			if (!await workoutService.ExistsByIdAsync(id))
+			{
+				return View("WorkoutDoNotExist");
+			}
+
+			WorkoutDetailsViewModel? workoutDetails = await workoutService.GetWorkoutById(id);
+
+			if (workoutDetails == null || workoutDetails.AthleteId != athleteId)
+			{
+				return Unauthorized();
+			}
+
+			if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
+			{
+				ModelState.AddModelError(nameof(model.Title), string.Format(WorkoutWithSameNameExists, model.Title));
+			}
+
+			if (!workoutService.WorkoutDateIsInRange(model.Date))
+			{
+				ModelState.AddModelError(nameof(model.Date), string.Format(InvalidDate, DateTime.Now.ToShortDateString(), DateTime.Now.AddMonths(1).ToShortDateString()));
+			}
+
+			if (!workoutService.WorkoutTimeIsAtLeastThreeHoursInFuture(model.Date, model.Time))
+			{
+				ModelState.AddModelError(nameof(model.Time), InvalidTime);
+			}
+
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			await workoutService.EditAsync(id, model);
+
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

@@ -25,8 +25,11 @@
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();
 
-
+         
         private DbSet<T> DbSet<T>() where T  : class
             => context.Set<T>();
+
+        public async Task<T?> GetbyIdAsync<T>(object id) where T : class
+            => await DbSet<T>().FindAsync(id);
     }
 }

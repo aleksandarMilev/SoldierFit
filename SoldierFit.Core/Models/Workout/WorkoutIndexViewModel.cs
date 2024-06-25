@@ -31,6 +31,7 @@
             WorkoutBriefDescriptionMaxLength,
             MinimumLength = WorkoutBriefDescriptionMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Brief Description")]
         public string BriefDescription { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]

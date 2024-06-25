@@ -6,7 +6,10 @@
     using SoldierFit.Infrastructure.Common;
     using SoldierFit.Infrastructure.Data.Models;
     using System.Collections.Generic;
-    public class WorkoutService : IWorkoutService
+    using System.Data;
+	using System.Net;
+
+	public class WorkoutService : IWorkoutService
     {
         private readonly IRepository repository;
 
@@ -157,6 +160,27 @@
             return await repository
                 .AllAsNoTracking<Workout>()
                 .AnyAsync(w => w.Id == id);
+        }
+
+        public async Task EditAsync(int workoutId, CreateWorkoutViewModel model)
+        {
+            Workout? workout = await repository.GetbyIdAsync<Workout>(workoutId)
+                ?? throw new NullReferenceException("There is not such workout!");
+
+            if (workout != null)
+            {
+                workout.Title = model.Title;
+                workout.Date = model.Date;
+                workout.Time = model.Time;
+                workout.BriefDescription = model.BriefDescription;
+                workout.FullDescription = model.FullDescription;
+                workout.MaxParticipants = model.MaxParticipants;
+                workout.ImageUrl = model.ImageUrl;
+                workout.IsForBeginners = model.IsForBeginners;
+                workout.CategoryName = model.CategoryName;
+            }
+
+            await repository.SaveChangesAsync();
         }
     }
 }

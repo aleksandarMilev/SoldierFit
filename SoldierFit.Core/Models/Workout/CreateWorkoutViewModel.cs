@@ -7,6 +7,8 @@
 
     public class CreateWorkoutViewModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(
             WorkoutTitleMaxLength,
@@ -21,7 +23,7 @@
 
         [Required(ErrorMessage = RequiredMessage)]
         [DataType(DataType.Time)]
-        [Display(Name = "Workout Time")]
+        [Display(Name = "Workout Start Time")]
         public TimeSpan Time { get; set; }
 
         [Required(ErrorMessage = RequiredMessage)]
@@ -29,7 +31,8 @@
             WorkoutBriefDescriptionMaxLength,
             MinimumLength = WorkoutBriefDescriptionMinLength,
             ErrorMessage = LengthMessage)]
-        public string BriefDescription { get; set; } = string.Empty;
+		[Display(Name = "Brief Description")]
+		public string BriefDescription { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
         [StringLength(
