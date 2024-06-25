@@ -94,5 +94,10 @@
         /// Maximum value for workout participants count.
         /// </summary>
         public const int WorkoutParticipantsMaxValue = 15;
+
+        /// <summary>
+        /// Minimum value for current participants count.
+        /// </summary>
+        public const int WorkoutCurrentParticipantsMinValue = 0;
     }
 }

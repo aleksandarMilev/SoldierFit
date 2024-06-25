@@ -22,10 +22,10 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var pastModels = await workoutService.GetLastThreePastWorkoutsAsync();
-            var presentModels = await workoutService.GetLastThreeFutureWorkoutsAsync();
+            IEnumerable<WorkoutIndexViewModel> pastModels = await workoutService.GetLastThreePastWorkoutsAsync();
+            IEnumerable<WorkoutIndexViewModel> presentModels = await workoutService.GetLastThreeFutureWorkoutsAsync();
 
-            var model = new WorkoutsSummaryViewModel
+            FutureAndPastWorkoutsViewModel model = new()
             {
                 PastWorkouts = pastModels,
                 FutureWorkouts = presentModels,
@@ -95,6 +95,26 @@
             }
 
             IEnumerable<WorkoutIndexViewModel> model = await workoutService.GetWorkoutsByUserId(athleteId.Value);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId == null)
+            {
+                return View("NotAnAthlete");
+            }
+
+            if (!await workoutService.ExistsByIdAsync(id))
+            {
+                return View("WorkoutDoNotExist");
+            }
+
+            WorkoutDetailsViewModel? model = await workoutService.GetWorkoutById(id);
 
             return View(model);
         }

@@ -122,5 +122,41 @@
                 })
                 .ToListAsync();
         }
+
+        public async Task<WorkoutDetailsViewModel?> GetWorkoutById(int id)
+        {
+            return await repository
+                .AllAsNoTracking<Workout>()
+                .Select(w => new WorkoutDetailsViewModel()
+                {
+                    Id = w.Id,
+                    Title = w.Title,
+                    Date = w.Date,
+                    Time = w.Time,
+                    ImageUrl = w.ImageUrl,
+                    BriefDescription = w.BriefDescription,
+                    CategoryName = w.CategoryName,
+                    MaxParticipants = w.MaxParticipants,
+                    IsForBeginners = w.IsForBeginners,
+                    CurrentParticipants = w.CurrentParticipants,
+                    FullDescription = w.FullDescription,
+                    AthleteId = w.AthleteId,
+                    Athlete = new()
+                    {
+                        FirstName = w.Athlete.FirstName,
+                        MiddleName = w.Athlete.MiddleName,
+                        LastName = w.Athlete.LastName,
+                        PhoneNumber = w.Athlete.PhoneNumber,
+                    }
+                })
+                .FirstOrDefaultAsync(w => w.Id == id);
+        }
+
+        public async Task<bool> ExistsByIdAsync(int id)
+        {
+            return await repository
+                .AllAsNoTracking<Workout>()
+                .AnyAsync(w => w.Id == id);
+        }
     }
 }

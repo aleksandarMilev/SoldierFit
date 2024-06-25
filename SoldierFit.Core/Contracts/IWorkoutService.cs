@@ -17,5 +17,9 @@
         bool WorkoutTimeIsAtLeastThreeHoursInFuture(DateTime date, TimeSpan time);
 
         Task<IEnumerable<WorkoutIndexViewModel>> GetWorkoutsByUserId(int id);
+
+        Task<WorkoutDetailsViewModel?> GetWorkoutById(int id);
+
+        Task<bool> ExistsByIdAsync(int id);
     }
 }

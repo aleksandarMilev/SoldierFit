@@ -1,0 +1,30 @@
+﻿@model SoldierFit.Core.Models.Workout.WorkoutDetailsViewModel
+
+@{
+    ViewData["Title"] = "Workout Details";
+}
+
+<div class="container mt-5">
+    <h1 class="display-4">Workout Details</h1>
+    <hr />
+
+    <div class="card mb-3">
+        <img src="@Model.ImageUrl" class="card-img-top" alt="Workout Image">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.FullDescription</p>
+            <ul class="list-unstyled">
+                <li><strong>Date:</strong> @Model.Date.ToShortDateString()</li>
+                <li><strong>Time:</strong> @Model.Time.ToString("hh\\:mm")</li>
+                <li><strong>Category:</strong> @Model.CategoryName</li>
+                <li><strong>Max Participants:</strong> @Model.MaxParticipants</li>
+                <li><strong>Current Participants:</strong> @Model.CurrentParticipants</li>
+                <li><strong>Is For Beginners:</strong> @((Model.IsForBeginners ? "yes" : "no"))</li>
+                <li><strong>Athlete:</strong> @($"{Model.Athlete.FirstName} {Model.Athlete.MiddleName} {Model.Athlete.LastName}")</li>
+                <li><strong>Athlete Phone Number:</strong> @Model.Athlete.PhoneNumber</li>
+            </ul>
+            <a asp-controller="Workout" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Workout</a>
+            <a asp-controller="Workout" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete Workout</a>
+        </div>
+    </div>
+</div>
