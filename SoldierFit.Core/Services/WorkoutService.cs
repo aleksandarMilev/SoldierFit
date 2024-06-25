@@ -164,8 +164,8 @@
 
         public async Task EditAsync(int workoutId, CreateWorkoutViewModel model)
         {
-            Workout? workout = await repository.GetbyIdAsync<Workout>(workoutId)
-                ?? throw new NullReferenceException("There is not such workout!");
+            
+            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId);
 
             if (workout != null)
             {
@@ -182,5 +182,11 @@
 
             await repository.SaveChangesAsync();
         }
-    }
+
+		public async Task DeleteAsync(int workoutId)
+		{
+			await repository.DeleteAsync<Workout>(workoutId);
+			await repository.SaveChangesAsync();
+		}
+	}
 }

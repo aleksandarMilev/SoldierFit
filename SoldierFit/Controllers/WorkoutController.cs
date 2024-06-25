@@ -157,9 +157,56 @@
             return View(editModel);
         }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, CreateWorkoutViewModel model)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CreateWorkoutViewModel model)
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId == null)
+            {
+                return View("NotAnAthlete");
+            }
+
+            if (!await workoutService.ExistsByIdAsync(id))
+            {
+                return View("WorkoutDoNotExist");
+            }
+
+            WorkoutDetailsViewModel? workoutDetails = await workoutService.GetWorkoutById(id);
+
+            if (workoutDetails!.AthleteId != athleteId)
+            {
+                return Unauthorized();
+            }
+
+            if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
+            {
+                ModelState.AddModelError(nameof(model.Title), string.Format(WorkoutWithSameNameExists, model.Title));
+            }
+
+            if (!workoutService.WorkoutDateIsInRange(model.Date))
+            {
+                ModelState.AddModelError(nameof(model.Date), string.Format(InvalidDate, DateTime.Now.ToShortDateString(), DateTime.Now.AddMonths(1).ToShortDateString()));
+            }
+
+            if (!workoutService.WorkoutTimeIsAtLeastThreeHoursInFuture(model.Date, model.Time))
+            {
+                ModelState.AddModelError(nameof(model.Time), InvalidTime);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await workoutService.EditAsync(id, model);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(int id)
 		{
 			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
@@ -170,38 +217,43 @@
 
 			if (!await workoutService.ExistsByIdAsync(id))
 			{
-				return View("WorkoutDoNotExist");
+				return RedirectToAction("WorkoutDoNotExist");
 			}
 
-			WorkoutDetailsViewModel? workoutDetails = await workoutService.GetWorkoutById(id);
+			WorkoutDetailsViewModel? model = await workoutService.GetWorkoutById(id);
 
-			if (workoutDetails == null || workoutDetails.AthleteId != athleteId)
+			if (model.AthleteId != athleteId)
 			{
 				return Unauthorized();
 			}
 
-			if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
+			return View(model);
+		}
+
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+			if (athleteId == null)
 			{
-				ModelState.AddModelError(nameof(model.Title), string.Format(WorkoutWithSameNameExists, model.Title));
+				return View("NotAnAthlete");
 			}
 
-			if (!workoutService.WorkoutDateIsInRange(model.Date))
+			if (!await workoutService.ExistsByIdAsync(id))
 			{
-				ModelState.AddModelError(nameof(model.Date), string.Format(InvalidDate, DateTime.Now.ToShortDateString(), DateTime.Now.AddMonths(1).ToShortDateString()));
+				return RedirectToAction("WorkoutDoNotExist");
 			}
 
-			if (!workoutService.WorkoutTimeIsAtLeastThreeHoursInFuture(model.Date, model.Time))
+			WorkoutDetailsViewModel? model = await workoutService.GetWorkoutById(id);
+
+			if (model!.AthleteId != athleteId)
 			{
-				ModelState.AddModelError(nameof(model.Time), InvalidTime);
+				return Unauthorized();
 			}
 
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
-
-			await workoutService.EditAsync(id, model);
-
+			await workoutService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
 	}

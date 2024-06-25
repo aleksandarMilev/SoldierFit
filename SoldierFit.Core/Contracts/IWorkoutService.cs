@@ -23,5 +23,7 @@
         Task<bool> ExistsByIdAsync(int id);
 
         Task EditAsync(int workoutId, CreateWorkoutViewModel model);
+
+        Task DeleteAsync(int workoutId);
     }
 }

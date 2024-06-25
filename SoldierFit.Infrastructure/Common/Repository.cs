@@ -25,11 +25,20 @@
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();
 
-         
         private DbSet<T> DbSet<T>() where T  : class
             => context.Set<T>();
 
-        public async Task<T?> GetbyIdAsync<T>(object id) where T : class
+        public async Task<T?> GetByIdAsync<T>(object id) where T : class
             => await DbSet<T>().FindAsync(id);
+
+		public async Task DeleteAsync<T>(object id) where T : class
+		{
+			T? entity = await GetByIdAsync<T>(id);
+
+			if (entity != null)
+			{
+				DbSet<T>().Remove(entity);
+			}
+		}
     }
 }
