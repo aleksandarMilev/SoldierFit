@@ -2,13 +2,10 @@
 {
     using Microsoft.EntityFrameworkCore;
     using SoldierFit.Core.Contracts;
-    using SoldierFit.Core.Enumerations;
     using SoldierFit.Core.Models.Workout;
     using SoldierFit.Infrastructure.Common;
-    using SoldierFit.Infrastructure.Data.Enumerations;
     using SoldierFit.Infrastructure.Data.Models;
     using System.Collections.Generic;
-
     public class WorkoutService : IWorkoutService
     {
         private readonly IRepository repository;
@@ -106,45 +103,12 @@
             return workoutDateTime >= currentDateTime.AddHours(3);
         }
 
-        public async Task<WorkoutQueryServiceModel> AllAsync(
-            string? category = null,
-            string? searchTerm = null,
-            WorkoutSorting sorting = WorkoutSorting.Newest,
-            int currentPage = 1,
-            int workoutsPerPage = 0)
+        public async Task<IEnumerable<WorkoutIndexViewModel>> GetWorkoutsByUserId(int id)
         {
-            var workoutsToShow = repository.AllAsNoTracking<Workout>();
-
-            if (!string.IsNullOrWhiteSpace(category))
-            {
-                if (Enum.TryParse(category, out Category categoryParsed))
-                {
-                    workoutsToShow = workoutsToShow.Where(w => w.CategoryName == categoryParsed);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                string normalizedSearchTerm = searchTerm.ToLower();
-
-                workoutsToShow = workoutsToShow.Where(w =>
-                    w.Title.ToLower().Contains(normalizedSearchTerm) ||
-                    w.BriefDescription.ToLower().Contains(normalizedSearchTerm) ||
-                    w.FullDescription.ToLower().Contains(normalizedSearchTerm));
-            }
-
-            workoutsToShow = sorting switch
-            {
-                WorkoutSorting.Newest => workoutsToShow.OrderByDescending(w => w.Date),
-                WorkoutSorting.ForBegginners => workoutsToShow.OrderByDescending(w => w.IsForBeginners),
-                WorkoutSorting.WithMostFreeSpotsLeft => workoutsToShow.OrderBy(w => w.CurrentParticipants),
-                _ => workoutsToShow
-            };
-
-            var workouts = await workoutsToShow
-                .Skip((currentPage - 1) * workoutsPerPage)
-                .Take(workoutsPerPage)
-                .Select(w => new WorkoutIndexViewModel
+            return await repository
+                .AllAsNoTracking<Workout>()
+                .Where(w => w.AthleteId == id)
+                .Select(w => new WorkoutIndexViewModel()
                 {
                     Id = w.Id,
                     Title = w.Title,
@@ -157,19 +121,6 @@
                     IsForBeginners = w.IsForBeginners
                 })
                 .ToListAsync();
-
-            int totalWorkouts = await workoutsToShow.CountAsync();
-
-            return new WorkoutQueryServiceModel()
-            {
-                TotalWorkouts = totalWorkouts,
-                Workouts = workouts
-            };
-        }
-
-        public Task<IEnumerable<string>> AllCategoriesNamesAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

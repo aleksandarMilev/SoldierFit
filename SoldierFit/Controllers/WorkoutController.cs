@@ -20,7 +20,7 @@
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> Index()
         {
             var pastModels = await workoutService.GetLastThreePastWorkoutsAsync();
             var presentModels = await workoutService.GetLastThreeFutureWorkoutsAsync();
@@ -81,7 +81,22 @@
 
             await workoutService.CreateAsync(model, athleteId.Value);
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId == null)
+            {
+                return View("NotAnAthlete");
+            }
+
+            IEnumerable<WorkoutIndexViewModel> model = await workoutService.GetWorkoutsByUserId(athleteId.Value);
+
+            return View(model);
         }
     }
 }
