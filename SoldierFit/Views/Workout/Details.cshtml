@@ -1,4 +1,4 @@
-﻿@model SoldierFit.Core.Models.Workout.WorkoutDetailsViewModel
+﻿@model WorkoutDetailsViewModel
 
 @{
     ViewData["Title"] = "Workout Details";
@@ -19,12 +19,15 @@
                 <li><strong>Category:</strong> @Model.CategoryName</li>
                 <li><strong>Max Participants:</strong> @Model.MaxParticipants</li>
                 <li><strong>Current Participants:</strong> @Model.CurrentParticipants</li>
-                <li><strong>Is For Beginners:</strong> @((Model.IsForBeginners ? "yes" : "no"))</li>
+                <li><strong>Is For Beginners:</strong> @((Model.IsForBeginners ? "yes" : "no"))</li> 
                 <li><strong>Athlete:</strong> @($"{Model.Athlete.FirstName} {Model.Athlete.MiddleName} {Model.Athlete.LastName}")</li>
                 <li><strong>Athlete Phone Number:</strong> @Model.Athlete.PhoneNumber</li>
             </ul>
-            <a asp-controller="Workout" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Workout</a>
-            <a asp-controller="Workout" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete Workout</a>
+            @if (Model.AthleteId == ViewBag.CurrentAthleteId)
+            {
+                <a asp-controller="Workout" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Workout</a>
+                <a asp-controller="Workout" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete Workout</a>
+            }
         </div>
     </div>
 </div>

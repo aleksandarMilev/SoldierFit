@@ -4,8 +4,10 @@
     using SoldierFit.Core.Contracts;
     using SoldierFit.Infrastructure.Common;
     using SoldierFit.Infrastructure.Data.Models;
-    using System.Threading.Tasks;
 
+    /// <summary>
+    /// Service for managing athlete-related operations.
+    /// </summary>
     public class AthleteService : IAthleteService
     {
         private readonly IRepository repository;
@@ -15,6 +17,7 @@
             this.repository = repository;
         }
 
+        /// <inheritdoc/>
         public async Task CreateAsync(
             string firstName,
             string middleName,
@@ -39,6 +42,7 @@
             await repository.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task<bool> ExistByIdAsync(string userId)
         {
             return await repository
@@ -46,6 +50,7 @@
                 .AnyAsync(a => a.UserId == userId);
         }
 
+        /// <inheritdoc/>
         public async Task<bool> UserWithPhoneExistsAlready(string phoneNumber)
         {
             return await repository
@@ -53,6 +58,7 @@
                 .AnyAsync(a => a.PhoneNumber == phoneNumber);
         }
 
+        /// <inheritdoc/>
         public async Task<int?> GetAthleteIdAsync(string userId)
         {
             Athlete? athlete = await repository

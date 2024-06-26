@@ -12,6 +12,7 @@
             WorkoutFullDescriptionMaxLength,
             MinimumLength = WorkoutFullDescriptionMinLength,
             ErrorMessage = LengthMessage)]
+        [Display(Name = "Full Description")]
         public string FullDescription { get; set; } = string.Empty;
 
         [Required(ErrorMessage = RequiredMessage)]
