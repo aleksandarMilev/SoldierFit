@@ -104,5 +104,10 @@
         [Required]
         [Comment("Current number of participants for the workout")]
         public int CurrentParticipants { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mapping table between Athlete and Workout.
+        /// </summary>
+        public ICollection<AthleteWorkout> AthletesWorkouts { get; set; } = new List<AthleteWorkout>();
     }
 }

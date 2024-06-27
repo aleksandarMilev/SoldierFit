@@ -36,8 +36,8 @@
         {
             return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => 
-                    w.Date < DateTime.Now || 
+               .Where(w =>
+                    w.Date < DateTime.Now ||
                     (w.Date == DateTime.Now.Date && w.Time < DateTime.Now.TimeOfDay))
                .OrderByDescending(w => w.Date)
                .ThenByDescending(w => w.Time)
@@ -52,7 +52,7 @@
         {
             return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => 
+               .Where(w =>
                     w.Date > DateTime.Now ||
                     (w.Date == DateTime.Now.Date && w.Time >= DateTime.Now.TimeOfDay))
                .OrderBy(w => w.Date)
@@ -126,13 +126,13 @@
 
         /// <inheritdoc/>
 		public async Task DeleteAsync(int workoutId)
-		{
+        {
             Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
                 ?? throw new InvalidOperationException($"Workout with ID {workoutId} not found.");
 
             repository.Delete(workout);
-			await repository.SaveChangesAsync();
-		}
+            await repository.SaveChangesAsync();
+        }
 
 
 

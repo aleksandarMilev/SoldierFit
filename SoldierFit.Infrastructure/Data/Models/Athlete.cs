@@ -81,5 +81,10 @@
         /// </summary>
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the mapping table between Athlete and Workout.
+        /// </summary>
+        public ICollection<AthleteWorkout> AthletesWorkouts { get; set; } = new List<AthleteWorkout>();
     }
 }

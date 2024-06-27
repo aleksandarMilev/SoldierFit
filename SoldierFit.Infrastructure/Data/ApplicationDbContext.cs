@@ -31,7 +31,12 @@
         public DbSet<Workout> Workouts { get; set; } = null!;
 
         /// <summary>
-        /// Configures the model by applying entity configurations.
+        /// Gets or sets the DbSet representing the Workouts table.
+        /// </summary>
+        public DbSet<AthleteWorkout> AthletesWorkouts { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the DbSet representing the Athlete-Workout map table.
         /// </summary>
         /// <param name="builder">The model builder used to configure the model.</param>
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,6 +44,7 @@
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new WorkoutConfiguration());
+            builder.ApplyConfiguration(new AthleteWorkoutConfiguration());
         }
     }
 }
