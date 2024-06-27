@@ -36,9 +36,13 @@
         {
             return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => w.Date.Date < DateTime.Now.Date)
-               .OrderBy(w => w.Date)
+               .Where(w => 
+                    w.Date < DateTime.Now || 
+                    (w.Date == DateTime.Now.Date && w.Time < DateTime.Now.TimeOfDay))
+               .OrderByDescending(w => w.Date)
+               .ThenByDescending(w => w.Time)
                .Take(3)
+               .Reverse()
                .MakeProjectionToIndexViewModel()
                .ToListAsync();
         }
@@ -48,8 +52,11 @@
         {
             return await repository
                .AllAsNoTracking<Workout>()
-               .Where(w => w.Date.Date >= DateTime.Now.Date)
+               .Where(w => 
+                    w.Date > DateTime.Now ||
+                    (w.Date == DateTime.Now.Date && w.Time >= DateTime.Now.TimeOfDay))
                .OrderBy(w => w.Date)
+               .ThenBy(w => w.Time)
                .Take(3)
                .MakeProjectionToIndexViewModel()
                .ToListAsync();
