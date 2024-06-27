@@ -83,6 +83,14 @@
         /// <returns>A task that represents the asynchronous join operation.</returns>
         Task JoinAsync(int athleteId, int workoutId);
 
+        /// <summary>
+        /// Remove the athlete from the workout joined.
+        /// </summary>
+        /// <param name="athleteId">The identifier of the athlete who wants to be removed from the workout.</param>
+        /// <param name="workoutId">The identifier of the workout the athlete wants to leave.</param>
+        /// <returns>A task that represents the asynchronous leave operation.</returns>
+        Task LeaveAsync(int workoutId, int athleteId);
+
 
 
         /// <summary>

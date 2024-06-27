@@ -45,5 +45,13 @@
         /// <param name="userId">The current user identifier to search for.</param>
         /// <returns>A <see cref="Task{Nullable{Int32}}"/> representing the athlete identifier, or <c>null</c> if not found.</returns>
         Task<int?> GetAthleteIdAsync(string userId);
+
+        /// <summary>
+        /// Checks if the current athlete is a participant in a specific workout.
+        /// </summary>
+        /// <param name="workoutId">The workout identifier to check.</param>
+        /// <param name="athleteId">The athlete identifier to check.</param>
+        /// <returns>A <see cref="Task{Boolean}"/> indicating whether the athlete is a participant in the specified workout.</returns>
+        Task<bool> CurrentAthleteIsParticipant(int workoutId, int athleteId);
     }
 }

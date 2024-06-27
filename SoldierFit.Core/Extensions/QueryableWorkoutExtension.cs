@@ -61,7 +61,8 @@
                         MiddleName = w.Athlete.MiddleName,
                         LastName = w.Athlete.LastName,
                         PhoneNumber = w.Athlete.PhoneNumber,
-                    }
+                    },
+                    AthletesWorkouts = w.AthletesWorkouts,
                 });
         }
     }

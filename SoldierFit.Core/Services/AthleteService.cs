@@ -67,5 +67,13 @@
 
             return athlete?.Id;
         }
+
+        /// <inheritdoc/>
+        public async Task<bool> CurrentAthleteIsParticipant(int workoutId, int athleteId)
+        {
+            return await repository
+                .AllAsNoTracking<AthleteWorkout>()
+                .AnyAsync(aw => aw.WorkoutId == workoutId && aw.AthleteId == athleteId);
+        }
     }
 }

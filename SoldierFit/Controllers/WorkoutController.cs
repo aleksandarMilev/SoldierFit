@@ -6,6 +6,7 @@
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Exceptions;
     using SoldierFit.Core.Models.Workout;
+    using System.Net;
     using System.Security.Claims;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
 
@@ -78,7 +79,10 @@
                 return View("WorkoutDoNotExist");
             }
 
-            ViewBag.CurrentAthleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            ViewBag.CurrentAthleteId = athleteId.Value;
+            ViewBag.AthleteIsParticipant = await athleteService.CurrentAthleteIsParticipant(id, athleteId.Value);
 
             return View(model);
         }
@@ -244,12 +248,19 @@
 			return RedirectToAction(nameof(Index));
 		}
 
+        /// <summary>
+        /// Displays the success message after an athlete joins a workout.
+        /// </summary>
         [HttpGet]
         public IActionResult JoinSuccess()
         {
             return View();
         }
 
+        /// <summary>
+        /// Handles the join action for a workout.
+        /// </summary>
+        /// <param name="workoutId">The ID of the workout to join.</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AthleteAuthorization]
@@ -271,6 +282,43 @@
             }
 
             return RedirectToAction("JoinSuccess");
+        }
+
+        /// <summary>
+        /// Displays the success message after an athlete leaves a workout.
+        /// </summary>
+        [HttpGet]
+        public IActionResult LeaveSuccess()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Handles the leave action for a workout.
+        /// </summary>
+        /// <param name="workoutId">The ID of the workout to leave.</param>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AthleteAuthorization]
+        public async Task<IActionResult> Leave(int workoutId)
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            try
+            {
+                await workoutService.LeaveAsync(workoutId, athleteId.Value);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("does not exist"))
+                {
+                    return View("WorkoutDoNotExist");
+                }
+
+                return BadRequest();
+            }
+
+            return RedirectToAction("LeaveSuccess");
         }
 
         private async Task ValdateCreateViewModelDateAndName(CreateWorkoutViewModel model)

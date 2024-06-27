@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using SoldierFit.Core.Models.Athlete;
+    using SoldierFit.Infrastructure.Data.Models;
     using static SoldierFit.Infrastructure.Constants.DataConstraints;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
 
@@ -23,8 +24,8 @@
         [Display(Name = "Current Athletes count")]
         public int CurrentParticipants { get; set; }
 
-        public int AthleteId { get; set; }
-
         public AthleteIndexViewModel Athlete { get; set; } = null!;
+
+        public ICollection<AthleteWorkout> AthletesWorkouts { get; set; } = new List<AthleteWorkout>();
     }
 }

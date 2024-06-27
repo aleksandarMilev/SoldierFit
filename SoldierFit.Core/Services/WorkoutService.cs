@@ -81,8 +81,8 @@
                 .MakeProjectionToDetailsViewModel()
                 .FirstOrDefaultAsync(w => w.Id == id);
         }
-
-
+    
+        
 
         /// <inheritdoc/>
         public async Task CreateAsync(CreateWorkoutViewModel model, int athleteId)
@@ -135,6 +135,9 @@
             await repository.SaveChangesAsync();
         }
 
+
+
+
         /// <inheritdoc/>
         public async Task JoinAsync(int workoutId, int athleteId)
         {
@@ -156,6 +159,24 @@
             }
 
             await repository.AddAsync(athleteWorkout);
+            await repository.SaveChangesAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task LeaveAsync(int workoutId, int athleteId)
+        {
+            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+                ?? throw new InvalidOperationException($"Workout with ID: {workoutId} does not exist!");
+
+            Athlete? athlete = await repository.GetByIdAsync<Athlete>(athleteId)
+                ?? throw new InvalidOperationException($"Athlete with ID: {athleteId} does not exist!");
+
+            AthleteWorkout? athleteWorkout = await repository
+                .AllAsNoTracking<AthleteWorkout>()
+                .FirstOrDefaultAsync(aw => aw.AthleteId == athleteId && aw.WorkoutId == workoutId)
+                ?? throw new InvalidOperationException();
+
+            repository.Delete(athleteWorkout);
             await repository.SaveChangesAsync();
         }
 
