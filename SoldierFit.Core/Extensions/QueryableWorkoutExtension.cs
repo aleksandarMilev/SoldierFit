@@ -27,7 +27,8 @@
                      BriefDescription = w.BriefDescription,
                      CategoryName = w.CategoryName,
                      MaxParticipants = w.MaxParticipants,
-                     IsForBeginners = w.IsForBeginners
+                     IsForBeginners = w.IsForBeginners,
+                     AthleteId = w.AthleteId
                  });
         }
 

@@ -43,6 +43,8 @@
                 FutureWorkouts = presentModels,
             };
 
+            ViewBag.CurrentAthleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
             return View(model);
         }
 

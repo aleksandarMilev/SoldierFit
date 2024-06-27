@@ -58,5 +58,7 @@
             ErrorMessage = MaxParticipantsErrorMessage)]
         [Display(Name = "Max Participants")]
         public int MaxParticipants { get; set; }
+
+        public int AthleteId { get; set; }
     }
 }
