@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using SoldierFit.Core.Contracts;
+    using SoldierFit.Core.Exceptions;
     using SoldierFit.Core.Extensions;
     using SoldierFit.Core.Models.Workout;
     using SoldierFit.Infrastructure.Common;
@@ -134,6 +135,29 @@
             await repository.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
+        public async Task JoinAsync(int workoutId, int athleteId)
+        {
+            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+                ?? throw new InvalidOperationException($"Workout with ID: {workoutId} does not exist!");
+
+            Athlete? athlete = await repository.GetByIdAsync<Athlete>(athleteId)
+                ?? throw new InvalidOperationException($"Athlete with ID: {athleteId} does not exist!");
+
+            AthleteWorkout athleteWorkout = new() { AthleteId = athleteId, WorkoutId = workoutId };
+
+            bool athleteAlreadyJoined = await repository
+                .AllAsNoTracking<AthleteWorkout>()
+                .AnyAsync(aw => aw.AthleteId == athleteId && aw.WorkoutId == workoutId);
+
+            if (athleteAlreadyJoined)
+            {
+                throw new AlreadyJoinedException("Athlete is already a participant in this workout.");
+            }
+
+            await repository.AddAsync(athleteWorkout);
+            await repository.SaveChangesAsync();
+        }
 
 
         /// <inheritdoc/>

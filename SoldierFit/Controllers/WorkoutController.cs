@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using SoldierFit.Core.Contracts;
+    using SoldierFit.Core.Exceptions;
     using SoldierFit.Core.Models.Workout;
     using System.Security.Claims;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
@@ -242,6 +243,35 @@
 			await workoutService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
+
+        [HttpGet]
+        public IActionResult JoinSuccess()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AthleteAuthorization]
+        public async Task<IActionResult> Join(int workoutId)
+        {
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            try
+            {
+                await workoutService.JoinAsync(workoutId, athleteId.Value);
+            }
+            catch (AlreadyJoinedException)
+            {
+                return View("AlreadyJoined");
+            }
+            catch (InvalidOperationException)
+            {
+                return View("WorkoutDoNotExist");
+            }
+
+            return RedirectToAction("JoinSuccess");
+        }
 
         private async Task ValdateCreateViewModelDateAndName(CreateWorkoutViewModel model)
         {

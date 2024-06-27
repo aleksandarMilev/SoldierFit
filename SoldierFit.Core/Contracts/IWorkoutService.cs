@@ -65,7 +65,6 @@
         /// <returns>Task representing the asynchronous operation.</returns>
         Task EditAsync(int workoutId, CreateWorkoutViewModel model);
 
-
         /// <summary>
         /// Deletes a workout by its ID.
         /// </summary>
@@ -73,6 +72,16 @@
         /// <exception cref="InvalidOperationException">Thrown if no workout with the specified ID exists.</exception>
         /// <returns>Task representing the asynchronous operation.</returns>
         Task DeleteAsync(int workoutId);
+
+
+
+        /// <summary>
+        /// Allows an athlete to join a workout.
+        /// </summary>
+        /// <param name="athleteId">The identifier of the athlete who wants to join the workout.</param>
+        /// <param name="workoutId">The identifier of the workout the athlete wants to join.</param>
+        /// <returns>A task that represents the asynchronous join operation.</returns>
+        Task JoinAsync(int athleteId, int workoutId);
 
 
 
