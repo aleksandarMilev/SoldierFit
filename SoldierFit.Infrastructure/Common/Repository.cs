@@ -37,9 +37,6 @@
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();
 
-        private DbSet<T> DbSet<T>() where T : class
-            => context.Set<T>();
-
         /// <inheritdoc/>
         public async Task<T?> GetByIdAsync<T>(object id) where T : class
             => await DbSet<T>().FindAsync(id);
@@ -47,5 +44,8 @@
         /// <inheritdoc/>
         public void Delete<T>(T entity) where T : class
             => DbSet<T>().Remove(entity);
+
+        private DbSet<T> DbSet<T>() where T : class
+            => context.Set<T>();
     }
 }

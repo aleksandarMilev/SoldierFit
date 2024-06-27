@@ -68,12 +68,12 @@
         [AthleteAuthorization]
         public async Task<IActionResult> Details(int id)
         {
-            if (!await workoutService.ExistsByIdAsync(id))
+            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+
+            if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
-
-            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             ViewBag.CurrentAthleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
@@ -125,12 +125,12 @@
         {
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (!await workoutService.ExistsByIdAsync(id))
+            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+
+            if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
-
-            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model!.AthleteId != athleteId.Value)
             {
@@ -165,12 +165,12 @@
         {
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (!await workoutService.ExistsByIdAsync(id))
+            WorkoutDetailsViewModel? workoutDetails = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+
+            if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
-
-            WorkoutDetailsViewModel? workoutDetails = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (workoutDetails!.AthleteId != athleteId)
             {
@@ -199,14 +199,14 @@
 		{
 			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-			if (!await workoutService.ExistsByIdAsync(id))
-			{
-				return View("WorkoutDoNotExist");
-			}
-
 			WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
-			if (model!.AthleteId != athleteId.Value)
+            if (model is null)
+            {
+                return View("WorkoutDoNotExist");
+            }
+
+            if (model!.AthleteId != athleteId.Value)
 			{
 				return Unauthorized();
 			}
@@ -225,14 +225,14 @@
 		{
 			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-			if (!await workoutService.ExistsByIdAsync(id))
-			{
-				return RedirectToAction("WorkoutDoNotExist");
-			}
+            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
-			WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            if (model is null)
+            {
+                return View("WorkoutDoNotExist");
+            }
 
-			if (model!.AthleteId != athleteId.Value)
+            if (model!.AthleteId != athleteId.Value)
 			{
 				return Unauthorized();
 			}
