@@ -276,8 +276,13 @@
             {
                 return View("AlreadyJoined");
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                if (ex.Message.Contains("spots"))
+                {
+                    return View("NoFreeSpotsLeft");
+                }
+
                 return View("WorkoutDoNotExist");
             }
 

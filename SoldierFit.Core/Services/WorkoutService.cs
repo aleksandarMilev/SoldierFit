@@ -9,6 +9,7 @@
     using SoldierFit.Infrastructure.Data.Models;
     using System.Collections.Generic;
     using System.Data;
+    using static SoldierFit.Infrastructure.Constants.DataConstraints;
 
     public class WorkoutService : IWorkoutService
     {
@@ -158,6 +159,13 @@
                 throw new AlreadyJoinedException("Athlete is already a participant in this workout.");
             }
 
+            workout.CurrentParticipants++;
+
+            if (workout.CurrentParticipants > workout.MaxParticipants)
+            {
+                throw new InvalidOperationException("No more free spots left");
+            }
+
             await repository.AddAsync(athleteWorkout);
             await repository.SaveChangesAsync();
         }
@@ -175,6 +183,8 @@
                 .AllAsNoTracking<AthleteWorkout>()
                 .FirstOrDefaultAsync(aw => aw.AthleteId == athleteId && aw.WorkoutId == workoutId)
                 ?? throw new InvalidOperationException();
+
+            workout.CurrentParticipants--;
 
             repository.Delete(athleteWorkout);
             await repository.SaveChangesAsync();

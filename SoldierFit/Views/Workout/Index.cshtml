@@ -39,7 +39,7 @@
                                         {
                                             <a asp-controller="Workout" asp-action="Details" asp-route-id="@workout.Id" class="btn btn-primary btn-sm">View Details</a>
                                         }
-                                        @if(athleteId.Value == workout.AthleteId)
+                                        @if(athleteId != null && athleteId.Value == workout.AthleteId)
                                         {
                                             <a asp-controller="Workout" asp-action="Edit" asp-route-id="@workout.Id" class="btn btn-secondary btn-sm">Edit</a>
                                             <a asp-controller="Workout" asp-action="Delete" asp-route-id="@workout.Id" class="btn btn-danger btn-sm">Delete</a>
@@ -83,7 +83,7 @@
                                         {
                                             <a asp-controller="Workout" asp-action="Details" asp-route-id="@workout.Id" class="btn btn-primary btn-sm">View Details</a>
                                         }
-                                        @if (athleteId.Value == workout.AthleteId)
+                                        @if (athleteId != null && athleteId.Value == workout.AthleteId)
                                         {
                                             <a asp-controller="Workout" asp-action="Edit" asp-route-id="@workout.Id" class="btn btn-secondary btn-sm">Edit</a>
                                             <a asp-controller="Workout" asp-action="Delete" asp-route-id="@workout.Id" class="btn btn-danger btn-sm">Delete</a>
