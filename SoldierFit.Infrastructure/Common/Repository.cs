@@ -17,9 +17,7 @@
         /// </summary>
         /// <param name="context">The database context.</param>
         public Repository(ApplicationDbContext context)
-        {
-            this.context = context;
-        }
+            => this.context = context;
 
         /// <inheritdoc/>
         public IQueryable<T> All<T>() where T : class
@@ -35,7 +33,7 @@
 
         /// <inheritdoc/>
         public async Task<int> SaveChangesAsync()
-            => await context.SaveChangesAsync();
+            => await this.context.SaveChangesAsync();
 
         /// <inheritdoc/>
         public async Task<T?> GetByIdAsync<T>(object id) where T : class
@@ -46,6 +44,6 @@
             => DbSet<T>().Remove(entity);
 
         private DbSet<T> DbSet<T>() where T : class
-            => context.Set<T>();
+            => this.context.Set<T>();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SoldierFit.Core.Contracts
+﻿using SoldierFit.Core.Models.Workout;
+
+namespace SoldierFit.Core.Contracts
 {
     /// <summary>
     /// Provides methods for managing athlete data.

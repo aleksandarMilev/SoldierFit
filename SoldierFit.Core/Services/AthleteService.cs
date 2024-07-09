@@ -13,9 +13,7 @@
         private readonly IRepository repository;
 
         public AthleteService(IRepository repository)
-        {
-            this.repository = repository;
-        }
+            => this.repository = repository;
 
         /// <inheritdoc/>
         public async Task CreateAsync(
@@ -44,24 +42,20 @@
 
         /// <inheritdoc/>
         public async Task<bool> ExistByIdAsync(string userId)
-        {
-            return await repository
+            => await this.repository
                 .AllAsNoTracking<Athlete>()
                 .AnyAsync(a => a.UserId == userId);
-        }
 
         /// <inheritdoc/>
         public async Task<bool> UserWithPhoneExistsAlready(string phoneNumber)
-        {
-            return await repository
+            => await this.repository
                 .AllAsNoTracking<Athlete>()
                 .AnyAsync(a => a.PhoneNumber == phoneNumber);
-        }
 
         /// <inheritdoc/>
         public async Task<int?> GetAthleteIdAsync(string userId)
         {
-            Athlete? athlete = await repository
+            Athlete? athlete = await this.repository
                 .AllAsNoTracking<Athlete>()
                 .FirstOrDefaultAsync(a => a.UserId == userId);
 
@@ -70,10 +64,8 @@
 
         /// <inheritdoc/>
         public async Task<bool> CurrentAthleteIsParticipant(int workoutId, int athleteId)
-        {
-            return await repository
+            => await this.repository
                 .AllAsNoTracking<AthleteWorkout>()
                 .AnyAsync(aw => aw.WorkoutId == workoutId && aw.AthleteId == athleteId);
-        }
     }
 }

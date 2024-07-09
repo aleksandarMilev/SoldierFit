@@ -1,18 +1,23 @@
 namespace SoldierFit
 {
-    public class Program
+    using Microsoft.AspNetCore.Mvc;
+
+    public class Program 
     {
         public async static Task Main(string[] args)
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddApplicationServices();
             builder.Services.AddApplicationDbContext(builder.Configuration, builder.Environment);
             builder.Services.AddApplicationIdentity();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
-            WebApplication app = builder.Build();
+            var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
@@ -35,6 +40,8 @@ namespace SoldierFit
             app.MapDefaultControllerRoute();
 
             app.MapRazorPages();
+
+            await app.CreateAdminRoleAsync();
 
             await app.RunAsync();
         }

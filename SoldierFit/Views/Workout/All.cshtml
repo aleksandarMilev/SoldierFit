@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WorkoutIndexViewModel>
+
+@{
+    ViewData["Title"] = "All Workouts";
+    bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+}
+
+<div class="container mt-5">
+    <h1 class="display-4">All Workouts</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (!isAuthenticated)
+            {
+                <div class="text-center">
+                    <a href="~/Identity/Account/Login" class="btn btn-primary">Log in to see all workouts</a>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    @if (Model.Any())
+                    {
+                        @foreach (var workout in Model)
+                        {
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <img src="@workout.ImageUrl" class="card-img-top" alt="Workout Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@workout.Title</h5>
+                                        <p class="card-text">@workout.BriefDescription</p>
+                                        <ul class="list-unstyled">
+                                            <li><strong>Time:</strong> @workout.Time.ToString("hh\\:mm")</li>
+                                            <li><strong>Category:</strong> @workout.CategoryName</li>
+                                            <li><strong>Max Participants:</strong> @workout.MaxParticipants</li>
+                                            <li>
+                                                <strong>Is For Beginners:</strong> @{
+                                                    string isForBeginners = workout.IsForBeginners ? "yes" : "no";
+                                                } @isForBeginners
+                                            </li>
+                                        </ul>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                @if (workout.Date < DateTime.Now.Date)
+                                                {
+                                                    <span>Performed on @workout.Date.ToShortDateString()</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Scheduled for @workout.Date.ToShortDateString()</span>
+                                                }
+                                            </small>
+                                        </p>
+                                        <div class="btn-group" role="group" aria-label="Workout Actions">
+                                            <a asp-controller="Workout" asp-action="Details" asp-route-id="@workout.Id" class="btn btn-primary btn-sm">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No workouts available.</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

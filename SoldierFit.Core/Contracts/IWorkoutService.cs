@@ -46,6 +46,20 @@
         /// <returns>A <see cref="WorkoutDetailsViewModel"/> representing the workout details, or null if not found.</returns>
         Task<WorkoutDetailsViewModel?> GetDetailsViewModelByWorkoutIdAsync(int id);
 
+        /// <summary>
+        /// Retrieves workouts where an athlete has joined based on the athlete's ID.
+        /// </summary>
+        /// <param name="athleteId">The ID of the athlete.</param>
+        /// <returns>A collection of <see cref="WorkoutIndexViewModel"/> representing the workouts where the athlete has joined.</returns>
+        Task<IEnumerable<WorkoutIndexViewModel>> GetIndexViewModelsWhereAthleteIsJoinedAsync(int athleteId);
+
+        /// <summary>
+        /// Retrieves all workouts as <see cref="WorkoutIndexViewModel"/>.
+        /// </summary>
+        /// <returns>A collection of <see cref="WorkoutIndexViewModel"/> representing all workouts.</returns>
+        Task<IEnumerable<WorkoutIndexViewModel>> GetAllIndexViewModelsAsync();
+
+
 
 
         /// <summary>

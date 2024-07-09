@@ -1,14 +1,14 @@
 ﻿namespace SoldierFit.Controllers
 {
-    using HouseRentingSystem.Attributes;
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using SoldierFit.Attributes;
     using SoldierFit.Core.Contracts;
     using SoldierFit.Core.Exceptions;
     using SoldierFit.Core.Models.Workout;
-    using System.Net;
-    using System.Security.Claims;
     using static SoldierFit.Infrastructure.Constants.MessageConstants;
+    using static SoldierFit.Utilities.WebConstants;
 
     /// <summary>
     /// Controller responsible for managing workouts.
@@ -23,7 +23,9 @@
         /// </summary>
         /// <param name="workoutService">The workout service.</param>
         /// <param name="athleteService">The athlete service.</param>
-        public WorkoutController(IWorkoutService workoutService, IAthleteService athleteService)
+        public WorkoutController(
+            IWorkoutService workoutService,
+            IAthleteService athleteService)
         {
             this.workoutService = workoutService;
             this.athleteService = athleteService;
@@ -36,22 +38,32 @@
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<WorkoutIndexViewModel> pastModels = await workoutService.GetLastThreePastIndexViewModelsAsync();
-            IEnumerable<WorkoutIndexViewModel> presentModels = await workoutService.GetLastThreeFutureIndexViewModelsAsync();
+            var pastModels = await workoutService.GetLastThreePastIndexViewModelsAsync();
+            var presentModels = await workoutService.GetLastThreeFutureIndexViewModelsAsync();
 
-            FutureAndPastWorkoutsViewModel model = new()
+            var model = new FutureAndPastWorkoutsViewModel()
             {
                 PastWorkouts = pastModels,
                 FutureWorkouts = presentModels,
             };
 
-            ViewBag.CurrentAthleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+            string userId = this.User.GetId();
+            this.ViewBag.CurrentAthleteId = await athleteService.GetAthleteIdAsync(userId);
 
             return View(model);
         }
 
         /// <summary>
-        /// Retrieves workouts owned by the current athlete.
+        /// Retrieves the all workouts ordered by date and time of creating.
+        /// </summary>
+        [HttpGet]
+        [AthleteAuthorization]
+        public async Task<IActionResult> All()
+            => this.View(await workoutService.GetAllIndexViewModelsAsync());
+
+
+        /// <summary>
+        /// Retrieves workouts created by the current athlete.
         /// </summary>
         [HttpGet]
         [AthleteAuthorization]
@@ -59,7 +71,7 @@
         {
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            IEnumerable<WorkoutIndexViewModel> model = await workoutService.GetIndexViewModelsByAthleteIdAsync(athleteId.Value);
+            var model = await workoutService.GetIndexViewModelsByAthleteIdAsync(athleteId.Value);
 
             return View(model);
         }
@@ -72,7 +84,7 @@
         [AthleteAuthorization]
         public async Task<IActionResult> Details(int id)
         {
-            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            var model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model is null)
             {
@@ -81,8 +93,11 @@
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            ViewBag.CurrentAthleteId = athleteId.Value;
-            ViewBag.AthleteIsParticipant = await athleteService.CurrentAthleteIsParticipant(id, athleteId.Value);
+            if (athleteId.HasValue)
+            {
+                ViewBag.CurrentAthleteId = athleteId.Value;
+                ViewBag.AthleteIsParticipant = await athleteService.CurrentAthleteIsParticipant(id, athleteId.Value);
+            }
 
             return View(model);
         }
@@ -93,11 +108,7 @@
         [HttpGet]
         [AthleteAuthorization]
         public IActionResult Create()
-        {
-            CreateWorkoutViewModel model = new();
-
-            return View(model);
-        }
+            => View(new CreateWorkoutViewModel());
 
         /// <summary>
         /// Handles the creation of a new workout.
@@ -105,10 +116,9 @@
         /// <param name="model">The data for the new workout.</param>
         [HttpPost]
         [AthleteAuthorization]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateWorkoutViewModel model)
         {
-            await ValdateCreateViewModelDateAndName(model);
+            await ValidateCreateViewModelDateAndName(model);
 
             if (!ModelState.IsValid)
             {
@@ -130,21 +140,29 @@
         [AthleteAuthorization]
         public async Task<IActionResult> Edit(int id)
         {
-            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
-
-            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            var model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
 
-            if (model!.AthleteId != athleteId.Value)
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId is null && !User.IsInRole(AdminRoleName))
             {
                 return Unauthorized();
             }
 
-            CreateWorkoutViewModel editModel = new()
+            if (athleteId.HasValue)
+            {
+                if (model.AthleteId != athleteId)
+                {
+                    return Unauthorized();
+                }
+            }
+
+            var editModel = new CreateWorkoutViewModel()
             {
                 Title = model.Title,
                 Date = model.Date,
@@ -166,25 +184,32 @@
         /// <param name="id">The ID of the workout to edit.</param>
         /// <param name="model">The updated data for the workout.</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [AthleteAuthorization]
         public async Task<IActionResult> Edit(int id, CreateWorkoutViewModel model)
         {
-            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
-
-            WorkoutDetailsViewModel? workoutDetails = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            var workoutDetails = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
 
-            if (workoutDetails!.AthleteId != athleteId)
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
+
+            if (athleteId is null && !User.IsInRole(AdminRoleName))
             {
                 return Unauthorized();
             }
 
-            await ValdateCreateViewModelDateAndName(model);
+            if (athleteId.HasValue)
+            {
+                if (workoutDetails!.AthleteId != athleteId)
+                {
+                    return Unauthorized();
+                }
+            }
+
+            await ValidateCreateViewModelDateAndName(model);
 
             if (!ModelState.IsValid)
             {
@@ -204,21 +229,28 @@
         [AthleteAuthorization]
         public async Task<IActionResult> Delete(int id)
 		{
-			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
-
-			WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            var model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
 
-            if (model!.AthleteId != athleteId.Value)
-			{
-				return Unauthorized();
-			}
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-			return View(model);
+            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            {
+                return Unauthorized();
+            }
+
+            if (athleteId.HasValue)
+            {
+                if (model.AthleteId != athleteId)
+                {
+                    return Unauthorized();
+                }
+            }
+            return View(model);
 		}
 
         /// <summary>
@@ -226,25 +258,32 @@
         /// </summary>
         /// <param name="id">The ID of the workout to delete.</param>
         [HttpPost]
-		[ValidateAntiForgeryToken]
         [AthleteAuthorization]
         public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
-
-            WorkoutDetailsViewModel? model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
+            var model = await workoutService.GetDetailsViewModelByWorkoutIdAsync(id);
 
             if (model is null)
             {
                 return View("WorkoutDoNotExist");
             }
 
-            if (model!.AthleteId != athleteId.Value)
-			{
-				return Unauthorized();
-			}
+            int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-			await workoutService.DeleteAsync(id);
+            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            {
+                return Unauthorized();
+            }
+
+            if (athleteId.HasValue)
+            {
+                if (model.AthleteId != athleteId)
+                {
+                    return Unauthorized();
+                }
+            }
+
+            await workoutService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -253,16 +292,13 @@
         /// </summary>
         [HttpGet]
         public IActionResult JoinSuccess()
-        {
-            return View();
-        }
+            => View();
 
         /// <summary>
         /// Handles the join action for a workout.
         /// </summary>
         /// <param name="workoutId">The ID of the workout to join.</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [AthleteAuthorization]
         public async Task<IActionResult> Join(int workoutId)
         {
@@ -290,20 +326,32 @@
         }
 
         /// <summary>
+        /// Retrieves all workouts where the current athlete is joined
+        /// </summary>
+        [HttpGet]
+        [AthleteAuthorization]
+        public async Task<IActionResult> JoinedWorkouts()
+        {
+            string userId = this.User.GetId();
+            int? athleteId = await this.athleteService.GetAthleteIdAsync(userId);
+
+            var model = await this.workoutService.GetIndexViewModelsWhereAthleteIsJoinedAsync(athleteId.Value);
+
+            return this.View(model);
+        }
+
+        /// <summary>
         /// Displays the success message after an athlete leaves a workout.
         /// </summary>
         [HttpGet]
         public IActionResult LeaveSuccess()
-        {
-            return View();
-        }
+            => View();
 
         /// <summary>
         /// Handles the leave action for a workout.
         /// </summary>
         /// <param name="workoutId">The ID of the workout to leave.</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [AthleteAuthorization]
         public async Task<IActionResult> Leave(int workoutId)
         {
@@ -326,7 +374,7 @@
             return RedirectToAction("LeaveSuccess");
         }
 
-        private async Task ValdateCreateViewModelDateAndName(CreateWorkoutViewModel model)
+        private async Task ValidateCreateViewModelDateAndName(CreateWorkoutViewModel model)
         {
             if (await workoutService.WorkoutWithSameNameExistsAsync(model.Title))
             {

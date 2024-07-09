@@ -12,6 +12,8 @@
             ErrorMessage = ValueMessage)]
         public int Age { get; set; }
 
+        [Required(ErrorMessage = RequiredMessage)]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
     }
 }

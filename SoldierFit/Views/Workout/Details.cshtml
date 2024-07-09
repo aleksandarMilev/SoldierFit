@@ -1,7 +1,10 @@
-﻿@model WorkoutDetailsViewModel
+﻿@using static SoldierFit.Utilities.WebConstants;
+
+@model WorkoutDetailsViewModel
 
 @{
     ViewData["Title"] = "Workout Details";
+    bool isAdmin = this.User.IsInRole(AdminRoleName);
 }
 
 <div class="container mt-5">
@@ -23,24 +26,37 @@
                 <li><strong>Athlete:</strong> @($"{Model.Athlete.FirstName} {Model.Athlete.MiddleName} {Model.Athlete.LastName}")</li>
                 <li><strong>Athlete Phone Number:</strong> @Model.Athlete.PhoneNumber</li>
             </ul>
-            @if (ViewBag.AthleteIsParticipant)
+            @if (!isAdmin)
             {
-                <form asp-controller="Workout" asp-action="Leave" method="post">
-                    <input type="hidden" name="workoutId" value="@Model.Id" />
-                    <button type="submit" class="btn btn-warning">Leave Workout</button>
-                </form>
+                @if (ViewBag.AthleteIsParticipant ?? false)
+                {
+                    <form asp-controller="Workout" asp-action="Leave" method="post">
+                        <input type="hidden" name="workoutId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-warning">Leave Workout</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-controller="Workout" asp-action="Join" method="post">
+                        <input type="hidden" name="workoutId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success">Join Workout</button>
+                    </form>
+                }
             }
-            else
-            {
-                <form asp-controller="Workout" asp-action="Join" method="post">
-                    <input type="hidden" name="workoutId" value="@Model.Id" />
-                    <button type="submit" class="btn btn-success">Join Workout</button>
-                </form>
-            }
-            @if (Model.AthleteId == ViewBag.CurrentAthleteId)
+
+            @if (isAdmin)
             {
                 <a asp-controller="Workout" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Workout</a>
                 <a asp-controller="Workout" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete Workout</a>
+            }
+
+            @if (ViewBag.CurrentAthleteId != null)
+            {
+                @if (Model.AthleteId == ViewBag.CurrentAthleteId)
+                {
+                    <a asp-controller="Workout" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Workout</a>
+                    <a asp-controller="Workout" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete Workout</a>
+                }
             }
         </div>
     </div>

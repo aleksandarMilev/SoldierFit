@@ -15,8 +15,7 @@
         /// <param name="workouts">The source IQueryable&lt;Workout&gt; to project from.</param>
         /// <returns>An IQueryable&lt;WorkoutIndexViewModel&gt; representing the projected results.</returns>
         public static IQueryable<WorkoutIndexViewModel> MakeProjectionToIndexViewModel(this IQueryable<Workout> workouts)
-        {
-            return workouts
+            => workouts
                  .Select(w => new WorkoutIndexViewModel()
                  {
                      Id = w.Id,
@@ -30,7 +29,6 @@
                      IsForBeginners = w.IsForBeginners,
                      AthleteId = w.AthleteId
                  });
-        }
 
         /// <summary>
         /// Projects an IQueryable&lt;Workout&gt; to an IQueryable&lt;WorkoutDetailsViewModel&gt;,
@@ -39,8 +37,7 @@
         /// <param name="workouts">The source IQueryable&lt;Workout&gt; to project from.</param>
         /// <returns>An IQueryable&lt;WorkoutDetailsViewModel&gt; representing the projected results.</returns>
         public static IQueryable<WorkoutDetailsViewModel> MakeProjectionToDetailsViewModel(this IQueryable<Workout> workouts)
-        {
-            return workouts
+            => workouts
                 .Select(w => new WorkoutDetailsViewModel()
                 {
                     Id = w.Id,
@@ -64,6 +61,5 @@
                     },
                     AthletesWorkouts = w.AthletesWorkouts,
                 });
-        }
     }
 }

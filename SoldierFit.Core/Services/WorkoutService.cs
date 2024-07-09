@@ -18,69 +18,64 @@
         /// Service implementation for managing workouts.
         /// </summary>
         public WorkoutService(IRepository repository)
-        {
-            this.repository = repository;
-        }
+            => this.repository = repository;
 
         /// <inheritdoc/>
         public async Task<bool> ExistsByIdAsync(int id)
-        {
-            return await repository
+            => await this.repository
                 .AllAsNoTracking<Workout>()
                 .AnyAsync(w => w.Id == id);
-        }
 
-
+        /// <inheritdoc/>
+        public async Task<IEnumerable<WorkoutIndexViewModel>> GetAllIndexViewModelsAsync()
+            => await this.repository
+               .AllAsNoTracking<Workout>()
+               .OrderBy(w => w.Date)
+               .ThenBy(w => w.Time)
+               .MakeProjectionToIndexViewModel()
+               .ToListAsync();
 
         /// <inheritdoc/>
         public async Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreePastIndexViewModelsAsync()
-        {
-            return await repository
+            => await this.repository
                .AllAsNoTracking<Workout>()
                .Where(w =>
-                    w.Date < DateTime.Now ||
-                    (w.Date == DateTime.Now.Date && w.Time < DateTime.Now.TimeOfDay))
+                    w.Date < DateTime.Now.Date ||
+                    w.Date == DateTime.Now.Date && w.Time < DateTime.Now.TimeOfDay)
                .OrderByDescending(w => w.Date)
                .ThenByDescending(w => w.Time)
                .Take(3)
                .Reverse()
                .MakeProjectionToIndexViewModel()
                .ToListAsync();
-        }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreeFutureIndexViewModelsAsync()
-        {
-            return await repository
+        public async Task<IEnumerable<WorkoutIndexViewModel>> GetLastThreeFutureIndexViewModelsAsync() 
+            => await this.repository
                .AllAsNoTracking<Workout>()
-               .Where(w =>
-                    w.Date > DateTime.Now ||
-                    (w.Date == DateTime.Now.Date && w.Time >= DateTime.Now.TimeOfDay))
+               .Where(w => 
+                    w.Date > DateTime.Now.Date || 
+                    w.Date == DateTime.Now.Date && w.Time > DateTime.Now.TimeOfDay)
                .OrderBy(w => w.Date)
                .ThenBy(w => w.Time)
                .Take(3)
                .MakeProjectionToIndexViewModel()
                .ToListAsync();
-        }
 
         /// <inheritdoc/>
         public async Task<IEnumerable<WorkoutIndexViewModel>> GetIndexViewModelsByAthleteIdAsync(int id)
-        {
-            return await repository
+             => await this.repository
                 .AllAsNoTracking<Workout>()
                 .Where(w => w.AthleteId == id)
                 .MakeProjectionToIndexViewModel()
                 .ToListAsync();
-        }
 
         /// <inheritdoc/>
         public async Task<WorkoutDetailsViewModel?> GetDetailsViewModelByWorkoutIdAsync(int id)
-        {
-            return await repository
+            => await this.repository
                 .AllAsNoTracking<Workout>()
                 .MakeProjectionToDetailsViewModel()
                 .FirstOrDefaultAsync(w => w.Id == id);
-        }
     
         
 
@@ -102,14 +97,14 @@
                 AthleteId = athleteId
             };
 
-            await repository.AddAsync(workout);
-            await repository.SaveChangesAsync();
+            await this.repository.AddAsync(workout);
+            await this.repository.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
         public async Task EditAsync(int workoutId, CreateWorkoutViewModel model)
         {
-            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+            Workout? workout = await this.repository.GetByIdAsync<Workout>(workoutId)
                 ?? throw new InvalidOperationException($"Workout with ID {workoutId} not found.");
 
             workout.Title = model.Title;
@@ -122,33 +117,42 @@
             workout.IsForBeginners = model.IsForBeginners;
             workout.CategoryName = model.CategoryName;
 
-            await repository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
 		public async Task DeleteAsync(int workoutId)
         {
-            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+            var workout = await repository.GetByIdAsync<Workout>(workoutId)
                 ?? throw new InvalidOperationException($"Workout with ID {workoutId} not found.");
 
-            repository.Delete(workout);
-            await repository.SaveChangesAsync();
-        }
+            if (workout.CurrentParticipants > 0)
+            {
+                var athleteWorkout = await this.repository
+                    .AllAsNoTracking<AthleteWorkout>()
+                    .Where(aw => aw.WorkoutId == workout.Id)
+                    .FirstOrDefaultAsync();
 
+                this.repository.Delete(athleteWorkout!);
+            }
+
+            this.repository.Delete(workout);
+            await this.repository.SaveChangesAsync();
+        }
 
 
         /// <inheritdoc/>
         public async Task JoinAsync(int workoutId, int athleteId)
         {
-            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+            var workout = await this.repository.GetByIdAsync<Workout>(workoutId)
                 ?? throw new InvalidOperationException($"Workout with ID: {workoutId} does not exist!");
 
-            Athlete? athlete = await repository.GetByIdAsync<Athlete>(athleteId)
+            var athlete = await this.repository.GetByIdAsync<Athlete>(athleteId)
                 ?? throw new InvalidOperationException($"Athlete with ID: {athleteId} does not exist!");
 
-            AthleteWorkout athleteWorkout = new() { AthleteId = athleteId, WorkoutId = workoutId };
+            var athleteWorkout = new AthleteWorkout { AthleteId = athleteId, WorkoutId = workoutId };
 
-            bool athleteAlreadyJoined = await repository
+            bool athleteAlreadyJoined = await this.repository
                 .AllAsNoTracking<AthleteWorkout>()
                 .AnyAsync(aw => aw.AthleteId == athleteId && aw.WorkoutId == workoutId);
 
@@ -164,28 +168,28 @@
 
             workout.CurrentParticipants++;
 
-            await repository.AddAsync(athleteWorkout);
-            await repository.SaveChangesAsync();
+            await this.repository.AddAsync(athleteWorkout);
+            await this.repository.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
         public async Task LeaveAsync(int workoutId, int athleteId)
         {
-            Workout? workout = await repository.GetByIdAsync<Workout>(workoutId)
+            var workout = await this.repository.GetByIdAsync<Workout>(workoutId)
                 ?? throw new InvalidOperationException($"Workout with ID: {workoutId} does not exist!");
 
-            Athlete? athlete = await repository.GetByIdAsync<Athlete>(athleteId)
+            var athlete = await this.repository.GetByIdAsync<Athlete>(athleteId)
                 ?? throw new InvalidOperationException($"Athlete with ID: {athleteId} does not exist!");
 
-            AthleteWorkout? athleteWorkout = await repository
+            var athleteWorkout = await this.repository
                 .AllAsNoTracking<AthleteWorkout>()
                 .FirstOrDefaultAsync(aw => aw.AthleteId == athleteId && aw.WorkoutId == workoutId)
                 ?? throw new InvalidOperationException();
 
             workout.CurrentParticipants--;
 
-            repository.Delete(athleteWorkout);
-            await repository.SaveChangesAsync();
+            this.repository.Delete(athleteWorkout);
+            await this.repository.SaveChangesAsync();
         }
 
 
@@ -211,9 +215,21 @@
         /// <inheritdoc/>
         public async Task<bool> WorkoutWithSameNameExistsAsync(string title)
         {
-            return await repository
+            return await this.repository
                 .AllAsNoTracking<Workout>()
                 .AnyAsync(w => w.Title == title);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IEnumerable<WorkoutIndexViewModel>> GetIndexViewModelsWhereAthleteIsJoinedAsync(int athleteId)
+        {
+            return await this.repository
+                .AllAsNoTracking<AthleteWorkout>()
+                .Where(aw => aw.AthleteId == athleteId)
+                .OrderBy(aw => aw.Workout.Date)
+                .ThenBy(aw => aw.Workout.Time)
+                .MakeProjectionToIndexViewModel()
+                .ToListAsync();
         }
     }
 }

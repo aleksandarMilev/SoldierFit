@@ -23,14 +23,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        @if (this.User.IsInRole(AdminRoleName) is false)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Athlete" asp-action="Become">Become Soldier-Athlete!</a>
-                            </li>
+                            @if (User?.Identity?.IsAuthenticated ?? false)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Athlete" asp-action="Become">Become Soldier-Athlete!</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="Mine">My workouts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="Create">Create workout</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="JoinedWorkouts">Joined workouts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="All">All workouts</a>
+                                </li>
+                            }
                         }
                     </ul>
                     <partial name="_LoginPartial" />

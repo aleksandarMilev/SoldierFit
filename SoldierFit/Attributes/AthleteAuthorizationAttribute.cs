@@ -1,10 +1,11 @@
-﻿namespace HouseRentingSystem.Attributes
+﻿namespace SoldierFit.Attributes
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using SoldierFit.Controllers;
     using SoldierFit.Core.Contracts;
     using System.Security.Claims;
+    using static SoldierFit.Utilities.WebConstants;
 
 
     /// <summary>
@@ -23,7 +24,9 @@
                 context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
-            if (service != null && !service.ExistByIdAsync(context.HttpContext.User.GetId()).Result)
+            if (service != null &&
+                !service.ExistByIdAsync(context.HttpContext.User.GetId()).Result &&
+                !context.HttpContext.User.IsInRole(AdminRoleName))
             {
                 context.Result = new RedirectToActionResult(nameof(AthleteController.Become), "Athlete", null);
             }
