@@ -71,6 +71,11 @@
         {
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
+            if (athleteId is null)
+            {
+                return BadRequest();
+            }
+
             var model = await workoutService.GetIndexViewModelsByAthleteIdAsync(athleteId.Value);
 
             return View(model);
@@ -126,7 +131,6 @@
             }
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
-
             await workoutService.CreateAsync(model, athleteId.Value);
 
             return RedirectToAction(nameof(Index));
@@ -149,17 +153,14 @@
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            if (athleteId is null && User.IsInRole(AdminRoleName) == false)
             {
                 return Unauthorized();
             }
 
-            if (athleteId.HasValue)
+            if (athleteId.HasValue && model.AthleteId != athleteId)
             {
-                if (model.AthleteId != athleteId)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
 
             var editModel = new CreateWorkoutViewModel()
@@ -196,17 +197,14 @@
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            if (athleteId is null && User.IsInRole(AdminRoleName) == false)
             {
                 return Unauthorized();
             }
 
-            if (athleteId.HasValue)
+            if (athleteId.HasValue && workoutDetails!.AthleteId != athleteId)
             {
-                if (workoutDetails!.AthleteId != athleteId)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
 
             await ValidateCreateViewModelDateAndName(model);
@@ -238,18 +236,16 @@
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            if (athleteId is null && User.IsInRole(AdminRoleName) == false)
             {
                 return Unauthorized();
             }
 
-            if (athleteId.HasValue)
+            if (athleteId.HasValue && model.AthleteId != athleteId)
             {
-                if (model.AthleteId != athleteId)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
+
             return View(model);
 		}
 
@@ -270,17 +266,14 @@
 
             int? athleteId = await athleteService.GetAthleteIdAsync(User.GetId());
 
-            if (athleteId is null && !User.IsInRole(AdminRoleName))
+            if (athleteId is null && User.IsInRole(AdminRoleName) == false)
             {
                 return Unauthorized();
             }
 
-            if (athleteId.HasValue)
+            if (athleteId.HasValue && model.AthleteId != athleteId)
             {
-                if (model.AthleteId != athleteId)
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
 
             await workoutService.DeleteAsync(id);

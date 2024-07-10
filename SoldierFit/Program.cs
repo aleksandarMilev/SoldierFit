@@ -1,6 +1,7 @@
 namespace SoldierFit
 {
     using Microsoft.AspNetCore.Mvc;
+    using SoldierFit.Core.Profiles;
 
     public class Program 
     {
@@ -17,6 +18,8 @@ namespace SoldierFit
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
